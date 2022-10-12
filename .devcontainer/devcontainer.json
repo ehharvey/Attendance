@@ -42,8 +42,7 @@
 			]
 		}
 	},
-	"postStartCommand": "pip install -r /workspaces/Attendance/requirements.txt",
-
+	"postStartCommand": "./utility-scripts/startup-script.sh",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
