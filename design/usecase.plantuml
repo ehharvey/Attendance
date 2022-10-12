@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+package EndUser as eu {
+  actor Student as s
+  actor Professor as p
+}
+
+package Frontend as f {
+  usecase getFrontEnd as gfef
+  usecase getNextCalendarEvent
+  usecase viewPastAttendanceDetails
+  usecase viewStudentAttendanceHistory
+  usecase viewAttendanceEventInfo
+}
+package Backend as b {
+  usecase getFrontEnd as gfeb
+  usecase getListOfAttendance
+  usecase getSpecificAttendanceDetails
+  usecase createAttendance
+  usecase updateAttendance
+}
+
+eu --> gfef
+eu --> viewPastAttendanceDetails
+eu --> viewAttendanceEventInfo
+f --> b
+p --> getNextCalendarEvent
+s --> viewStudentAttendanceHistory
+
+' https://drive.google.com/file/d/1ZYJXdoOj6T9bQgT7WwyhouoTLyuADQRH/view?usp=sharing
+@enduml
