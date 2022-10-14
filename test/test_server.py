@@ -1,8 +1,8 @@
 """
-Test functionality from server module
+Test functionality from backend module
 """
 
-from server.add import add
+from backend.add import add
 
 def test_add():
     """
