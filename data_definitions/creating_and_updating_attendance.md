@@ -5,4 +5,4 @@ pushes
 # Updating
 Frontend pulls old record from BACKEND
 - do not update the classlist
-- so old classlist applies
+- so old classlist appliesE
