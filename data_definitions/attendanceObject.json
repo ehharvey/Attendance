@@ -1,0 +1,12 @@
+{
+    "id": 123, // ID from Calendar
+    "records": [
+        {
+        "studentID": 456, // Student's ID
+        "isPresent": false
+        },
+        {
+            // ...
+        }
+    ]
+}

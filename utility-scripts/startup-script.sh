@@ -8,6 +8,8 @@ wget -O "$TEMP_FILE" https://github.com/GitCredentialManager/git-credential-mana
 sudo dpkg -i "$TEMP_FILE" &&
 git-credential-manager-core configure
 git config pull.ff only
+git config credential.credentialStore plaintext
+
 ./utility-scripts/configure-git.py
 
 
