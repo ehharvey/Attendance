@@ -14,3 +14,5 @@ git config credential.credentialStore plaintext
 
 
 rm -f "$TEMP_FILE"
+
+echo "Done!"
