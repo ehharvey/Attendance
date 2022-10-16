@@ -42,7 +42,9 @@
 			]
 		}
 	},
-	"postStartCommand": "./utility-scripts/startup-script.sh",
+	"onCreateCommand": "./utility-scripts/onCreateCommand.sh",
+	"postStartCommand": "pip install -r ./requirements.txt",
+	"postAttachCommand": "./utility-scripts/postAttachCommand.sh",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
