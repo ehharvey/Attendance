@@ -1,30 +1,43 @@
-from backend.attendance import Attendance, StudentAttendanceItem
-import json
+from dataclasses import dataclass
+from pathlib import Path
+from backend.database import Database
+from unittest.mock import MagicMock, mock_open
 
-def test_attendance_json():
-    """This is to test if the .json() functionality of Attendance object works as expected"""
 
-    #ARRANGE
-    student_id1 = StudentAttendanceItem(studentID = "123", isPresent = False)
-    student_id2 = StudentAttendanceItem(studentID = "456", isPresent = True)
-    my_attendance = Attendance(id="1", records = [student_id1, student_id2])
+# Mock for Attendance
+@dataclass
+class AttendanceMock:
+    id = "ID"
+    _payload = "Hello World"
 
-    _expected = json.dumps({
-        "id": "1",
-        "records": [
-            {
-                "studentID": "123",
-                "isPresent": False
-            },
-            {
-                "studentID": "456",
-                "isPresent": True
-            }
-        ]
-    })
+    def json(self):
+        return self._payload
+########################
 
-    #ACT
-    _actual = my_attendance.json()
-    
-    #ASSERT
-    assert _expected == _actual
+
+def test_database_init():
+    m_mkdir = MagicMock(return_value = None)
+
+    # Arrange
+    database = Database(mkdir = m_mkdir)
+
+    # Assert
+    m_mkdir.assert_called_once_with(Path("./backend_data/"))
+
+
+def test_database_createAttendance():
+    m_mkdir = MagicMock(return_value = None)
+    m_open: MagicMock = mock_open()
+
+
+    attendance = AttendanceMock()
+
+    # Arrange
+    database = Database(mkdir=m_mkdir)
+
+    # Act
+    database.createAttendance(attendanceObject=attendance, open = m_open)
+
+    # Assert
+    m_open.assert_called_once_with(Path("./backend_data/") / "ID", "w")
+    m_open().write.assert_called_once_with("Hello World")
