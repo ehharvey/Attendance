@@ -35,6 +35,8 @@ class DatabaseInterface:
         pass
 
 
+# We implement interfaces here. Avoid having direct implementations in classes marked ...Interfcace
+# (though we can implement them as stubs if needed)
 class Database(DatabaseInterface):
     ATTENDANCE_DATABASE_PATH = Path("./backend_data/")
 
