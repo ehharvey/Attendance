@@ -1,26 +1,14 @@
 from os import mkdir
+import json
+import os
 from pathlib import Path
 from typing import List
 from .attendance import Attendance
 
 class DatabaseInterface:
     """
-    Interface functionality for creating and updating 
+    Interface requirements for creating and updating 
     """
-    
-
-    # REMOVE WHEN ABLE: Interfaces should not receive implementations ##################################
-
-    # def createAttendance(self, attendanceObject: Attendance) -> None:
-
-    #     #save the object locally 
-    #     file = open('backend/database/data.dat','a+')
-    #     if file.tell()!=0:  #this is just to make sure that unless we're starting at 0 we should create a new line to read the json
-    #         file.write("\n")
-    #     file.write(attendanceObject.json())
-    #     pass
-
-    ####################################################################################################
 
     def createAttendance(self, attendanceObject: Attendance, file_opener = open):
         pass
@@ -47,9 +35,37 @@ class Database(DatabaseInterface):
             mkdir(self.ATTENDANCE_DATABASE_PATH)
 
     def createAttendance(self, attendanceObject: Attendance, open = open):
-        file_name = attendanceObject.id
+        full_path_name = str(self.ATTENDANCE_DATABASE_PATH) + attendanceObject.id + ".dat"
 
         # When opening files, use this approach [with open(...)]
         # This will automatically close the file at the end of the scope
-        with open(self.ATTENDANCE_DATABASE_PATH / file_name, "w") as f:
+        if (os.path.isfile(full_path_name)):
+            return # in future we should send response code that shows that we could not process this request. 
+
+
+        with open(full_path_name, "w") as f:
             f.write(attendanceObject.json())
+
+    def updateAttendance(self, attendanceObject: Attendance) -> None:
+        full_path_name = str(self.ATTENDANCE_DATABASE_PATH) + attendanceObject.id + ".dat"
+
+        if not (os.path.isfile(full_path_name)):
+            return # in future we should send response code that shows that we could not process this request. 
+        
+        # if it doesn't exist I can create the file and store it
+        with open(full_path_name, "w") as f:
+            f.write(attendanceObject.json())
+
+    def getAttendance(self, id: str) -> Attendance:
+
+        full_path_name = str(self.ATTENDANCE_DATABASE_PATH) + id + ".dat"
+        if not (os.path.isfile(full_path_name)):
+            return # in future we should send response code that shows that we could not process this request. 
+        
+        # if it doesn't exist I can create the file and store it
+         # if it doesn't exist I can create the file and store it
+        with open(full_path_name, "r") as f:
+            myDataString = f.read()
+            data = json.loads(myDataString)
+            attendance = Attendance (id = data["id"], records = data["records"])
+            return attendance
