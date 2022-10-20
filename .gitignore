@@ -4,3 +4,6 @@ __pycache__
 
 # Utility script cache
 utility-scripts/.configured-developer
+
+# database
+backend_data/
