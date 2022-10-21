@@ -15,8 +15,8 @@ function getCalendarEvent(){
 }
 
 function getBackend(){
-    // 192.168.2.102
-    const Url = 'http://192.168.2.102:5000';
+    // 192.168.2.103
+    const Url = 'http://192.168.2.103:5000';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", Url, false ); // false for synchronous request
     xmlHttp.send( null );
