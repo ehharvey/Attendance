@@ -7,3 +7,5 @@ utility-scripts/.configured-developer
 
 # database
 backend_data/
+deployment/flask.logs
+deployment/http.server.logs
