@@ -7,7 +7,7 @@ function getClasslist(){
 }
 
 function getCalendarEvent(){
-    const Url = 'http://192.168.2.101:27501/students';
+    const Url = 'http://192.168.2.101:27501/nextevent';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", Url, false ); // false for synchronous request
     xmlHttp.send( null );
