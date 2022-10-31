@@ -9,5 +9,7 @@ jobs:
         uses: wei/git-sync@v3
         with:
           source_repo: "https://github.com/CSCN73030-projectv-group9/Attendance.git"
+          source_branch: "refs/*"
           destination_repo: "git@ssh.dev.azure.com:v3/Ecoleshill/CSCN73030-F22/Attendance"
+          destination_branch: "refs/*"
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
