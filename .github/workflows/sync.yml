@@ -1,15 +1,12 @@
-name: Push to Azure
+# .github/workflows/git-sync.yml
 
 on: push
 jobs:
   git-sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: git-sync
+        uses: wei/git-sync@v3
         with:
-          fetch-depth: 0
-      - uses: yesolutions/mirror-action@master
-        with:
-          REMOTE: git@ssh.dev.azure.com:v3/Ecoleshill/CSCN73030-F22/Attendance
-          GIT_SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          GIT_SSH_NO_VERIFY_HOST: "true"
+          destination_repo: "git@ssh.dev.azure.com:v3/Ecoleshill/CSCN73030-F22/Attendance"
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
