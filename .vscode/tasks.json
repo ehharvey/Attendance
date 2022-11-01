@@ -7,6 +7,16 @@
             "label": "Serve Frontend",
             "type": "shell",
             "command": "python3 -m http.server -d ./frontend/"
+        },
+        {
+        "label": "Run startup script",
+        "type": "shell",
+        "command": "./Attendance.dev/utility-scripts/postAttachCommand.sh",
+        "presentation": {
+            "reveal": "always",
+            "panel": "new"
+        },
+        "runOptions": { "runOn": "folderOpen" }
         }
     ]
 }
