@@ -10,13 +10,13 @@
     "git.branchProtection": [
         "main"
     ],
-    "git.branchValidationRegex": "^(example|feature|bugfix|improvement|library|prerelease|release|hotfix)\\/[a-z0-9._-]+\\/#\\w+$",
+    "git.branchValidationRegex": "^(example|feature|bugfix|improvement|library|prerelease|release|hotfix)\\/#[0-9]+$",
     "git.pullBeforeCheckout": true,
-    "git.supportCancellation": true,
-    "git.terminalGitEditor": false,
-    "git.terminalAuthentication": false,
-    "git.useIntegratedAskPass": false,
-    "github.gitAuthentication": false,
 
-    "files.eol": "\n"
+    "files.eol": "\n",
+    "files.exclude": {
+        "**/Attendance.dev/": true
+    },
+    "task.allowAutomaticTasks": "on",
+    "python.linting.banditEnabled": true,
 }

@@ -35,7 +35,7 @@ class Database(DatabaseInterface):
             mkdir(self.ATTENDANCE_DATABASE_PATH)
 
     def createAttendance(self, attendanceObject: Attendance, open = open):
-        full_path_name = str(self.ATTENDANCE_DATABASE_PATH) + attendanceObject.id + ".dat"
+        full_path_name = self.ATTENDANCE_DATABASE_PATH / (attendanceObject.id + ".json")
 
         # When opening files, use this approach [with open(...)]
         # This will automatically close the file at the end of the scope
@@ -47,7 +47,7 @@ class Database(DatabaseInterface):
             f.write(attendanceObject.json())
 
     def updateAttendance(self, attendanceObject: Attendance) -> None:
-        full_path_name = str(self.ATTENDANCE_DATABASE_PATH) + attendanceObject.id + ".dat"
+        full_path_name = self.ATTENDANCE_DATABASE_PATH / (attendanceObject.id + ".json")
 
         if not (os.path.isfile(full_path_name)):
             return # in future we should send response code that shows that we could not process this request. 
@@ -58,7 +58,7 @@ class Database(DatabaseInterface):
 
     def getAttendance(self, id: str) -> Attendance:
 
-        full_path_name = str(self.ATTENDANCE_DATABASE_PATH) + id + ".dat"
+        full_path_name = self.ATTENDANCE_DATABASE_PATH / (id + ".json")
         if not (os.path.isfile(full_path_name)):
             return # in future we should send response code that shows that we could not process this request. 
         
