@@ -39,5 +39,5 @@ def test_database_createAttendance():
     database.createAttendance(attendanceObject=attendance, open = m_open)
 
     # Assert
-    m_open.assert_called_once_with(Path("./backend_data/") / "ID", "w")
+    m_open.assert_called_once_with(Path("./backend_data/") / "ID.json", "w")
     m_open().write.assert_called_once_with("Hello World")
