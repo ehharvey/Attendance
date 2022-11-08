@@ -1,0 +1,28 @@
+@startuml
+class Database {
+ATTENDANCE_DATABASE_PATH: str
+mkdir: func
+isfile: func
+open: func
+----
+__init__(ATTENDANCE_DATABASE_PATH, mkdir, isfile, open)
+createAttendance(attendance: Attendance)
+updateAttendance(attendance: Attendance)
+getAttendance(id: str)
+deleteAttendance(id: str)
+}
+
+
+struct Attendance {
+id: str
+records: List [StudentAttendanceItem]
+}
+
+struct StudentAttendanceItem {
+studentID: str
+isPresent: bool
+}
+
+Database   *---- Attendance
+Attendance *---- StudentAttendanceItem
+@enduml
