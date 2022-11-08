@@ -10,7 +10,7 @@
     "git.branchProtection": [
         "main"
     ],
-    "git.branchValidationRegex": "^(example|feature|bugfix|improvement|library|prerelease|release|hotfix)\\/#[0-9]+$",
+    "git.branchValidationRegex": "^(documentation|example|feature|bugfix|improvement|library|prerelease|release|hotfix)\\/#[0-9]+$",
     "git.pullBeforeCheckout": true,
 
     "files.eol": "\n",
