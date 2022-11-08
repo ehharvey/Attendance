@@ -69,3 +69,6 @@ class Database(DatabaseInterface):
             data = json.loads(myDataString)
             attendance = Attendance (id = data["id"], records = data["records"])
             return attendance
+    
+    def getSummaryAttendance(self) -> List[str]:
+        pass # For FEATURE #14: Fill out this function
