@@ -22,4 +22,6 @@ def getSummaryAttendance():
 
     result = database.getSummaryAttendance()
 
-    return result
+    return {
+        "records": result
+    }, 200 # tuple, return code
