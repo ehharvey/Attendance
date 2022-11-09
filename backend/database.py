@@ -27,44 +27,39 @@ class DatabaseInterface:
 # We implement interfaces here. Avoid having direct implementations in classes marked ...Interfcace
 # (though we can implement them as stubs if needed)
 class Database(DatabaseInterface):
-    ATTENDANCE_DATABASE_PATH: Path = Path("./backend_data/")
-    mkdirFunc = mkdir
-    openFunc = open
-    isfileFunc = os.path.isfile
+    ATTENDANCE_DATABASE_PATH: Path
 
     def __init__(
         self,
-        ATTENDANCE_DATABASE_PATH: Path = ATTENDANCE_DATABASE_PATH,
-        mkdirFunc=mkdir,
-        openFunc=open,
-        isFileFunc=os.path.isfile,
+        attendance_database_path: Path = Path("./backend_data/"),
     ):
-
         # Set dependencies here
-        self.ATTENDANCE_DATABASE_PATH = ATTENDANCE_DATABASE_PATH
-        self.mkdirFunc = mkdirFunc
-        self.openFunc = openFunc
-        self.isfileFunc = isFileFunc
+        self.ATTENDANCE_DATABASE_PATH = attendance_database_path
 
+        # If attendance path is not a dir, make it one
         if not self.ATTENDANCE_DATABASE_PATH.is_dir():
-            self.mkdirFunc(self.ATTENDANCE_DATABASE_PATH)
+            self.ATTENDANCE_DATABASE_PATH.mkdir()
 
     def createAttendance(self, attendanceObject: Attendance, open=open):
-        full_path_name = self.ATTENDANCE_DATABASE_PATH / (attendanceObject.id + ".json")
+        full_path_name = self.ATTENDANCE_DATABASE_PATH / \
+            (attendanceObject.id + ".json")
 
         # When opening files, use this approach [with open(...)]
         # This will automatically close the file at the end of the scope
         if os.path.isfile(full_path_name):
-            return  # in future we should send response code that shows that we could not process this request.
+            # in future we should send response code that shows that we could not process this request.
+            return
 
         with open(full_path_name, "w") as f:
             f.write(attendanceObject.json())
 
     def updateAttendance(self, attendanceObject: Attendance) -> None:
-        full_path_name = self.ATTENDANCE_DATABASE_PATH / (attendanceObject.id + ".json")
+        full_path_name = self.ATTENDANCE_DATABASE_PATH / \
+            (attendanceObject.id + ".json")
 
         if not (os.path.isfile(full_path_name)):
-            return  # in future we should send response code that shows that we could not process this request.
+            # in future we should send response code that shows that we could not process this request.
+            return
 
         # if it doesn't exist I can create the file and store it
         with open(full_path_name, "w") as f:
@@ -74,7 +69,8 @@ class Database(DatabaseInterface):
 
         full_path_name = self.ATTENDANCE_DATABASE_PATH / (id + ".json")
         if not (os.path.isfile(full_path_name)):
-            return  # in future we should send response code that shows that we could not process this request.
+            # in future we should send response code that shows that we could not process this request.
+            return
 
         # if it doesn't exist I can create the file and store it
         # if it doesn't exist I can create the file and store it
