@@ -19,4 +19,7 @@
     },
     "task.allowAutomaticTasks": "on",
     "python.linting.banditEnabled": true,
+    "editor.formatOnSave": true,
+    "git.fetchOnPull": true,
+    "git.autofetch": "all",
 }
