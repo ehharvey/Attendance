@@ -12,31 +12,32 @@ class AttendanceMock:
 
     def json(self):
         return self._payload
+
+
 ########################
 
 
 def test_database_init():
-    m_mkdir = MagicMock(return_value = None)
+    m_mkdir = MagicMock(return_value=None)
 
     # Arrange
-    database = Database(mkdir = m_mkdir)
+    database = Database(mkdirFunc=m_mkdir)
 
     # Assert
     m_mkdir.assert_called_once_with(Path("./backend_data/"))
 
 
 def test_database_createAttendance():
-    m_mkdir = MagicMock(return_value = None)
+    m_mkdir = MagicMock(return_value=None)
     m_open: MagicMock = mock_open()
-
 
     attendance = AttendanceMock()
 
     # Arrange
-    database = Database(mkdir=m_mkdir)
+    database = Database(mkdirFunc=m_mkdir, openFunc=m_open)
 
     # Act
-    database.createAttendance(attendanceObject=attendance, open = m_open)
+    database.createAttendance(attendanceObject=attendance, open=m_open)
 
     # Assert
     m_open.assert_called_once_with(Path("./backend_data/") / "ID.json", "w")

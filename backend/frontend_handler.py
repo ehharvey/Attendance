@@ -1,8 +1,8 @@
 from typing import List
 from .attendance import Attendance
 
-class FrontendHandlerInterface:
 
+class FrontendHandlerInterface:
     def getAllAttendanceIDs(self) -> List[str]:
         pass
 
