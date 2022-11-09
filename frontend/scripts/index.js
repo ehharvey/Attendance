@@ -11,11 +11,10 @@ module.exports.console_log = function logConsole(loggingValue) {
         console.log("[Page Load]" + " " + d);
         return ("[Page Load]" + " " + d);
     }
-
 }
 
 function getClasslist() {
-    //this.logConsole("Getting Class List");
+    logConsole("Getting Class List");
     const Url = 'http://192.168.2.104:27501/students';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
@@ -24,7 +23,7 @@ function getClasslist() {
 }
 
 module.exports.getCalendar = function getCalendarEvent() {
-    //logConsole("Getting Calendar Event");
+    logConsole("Getting Calendar Event");
     const Url = 'http://192.168.2.101:27501/nextevent';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
