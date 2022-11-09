@@ -26,13 +26,24 @@ class DatabaseInterface:
 # We implement interfaces here. Avoid having direct implementations in classes marked ...Interfcace
 # (though we can implement them as stubs if needed)
 class Database(DatabaseInterface):
-    ATTENDANCE_DATABASE_PATH = Path("./backend_data/")
+    ATTENDANCE_DATABASE_PATH: Path = Path("./backend_data/")
+    mkdirFunc = mkdir
+    openFunc = open
+    isfileFunc = os.path.isfile
 
-    # We can mock dependencies easily in python by adding extra parameters for dependencies
-    # Note that we supply the function itself, not the result of a function (e.g., a function call)
-    def __init__(self, mkdir=mkdir):
+    def __init__(self, ATTENDANCE_DATABASE_PATH: Path = ATTENDANCE_DATABASE_PATH,
+        mkdirFunc = mkdir,
+        openFunc = open,
+        isFileFunc = os.path.isfile):
+        
+        # Set dependencies here
+        self.ATTENDANCE_DATABASE_PATH = ATTENDANCE_DATABASE_PATH
+        self.mkdirFunc = mkdirFunc
+        self.openFunc = openFunc
+        self.isfileFunc = isFileFunc
+
         if not self.ATTENDANCE_DATABASE_PATH.is_dir():
-            mkdir(self.ATTENDANCE_DATABASE_PATH)
+            self.mkdirFunc(self.ATTENDANCE_DATABASE_PATH)
 
     def createAttendance(self, attendanceObject: Attendance, open = open):
         full_path_name = self.ATTENDANCE_DATABASE_PATH / (attendanceObject.id + ".json")
