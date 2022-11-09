@@ -9,3 +9,4 @@ utility-scripts/.configured-developer
 backend_data/
 deployment/flask.logs
 deployment/http.server.logs
+node_modules/
