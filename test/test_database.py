@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 from backend.database import Database
-from unittest.mock import MagicMock, mock_open
+from unittest.mock import MagicMock, mock_open, patch
 
 
 # Mock for Attendance
@@ -22,7 +22,8 @@ def test_database_init():
     database = Database(mkdir=m_mkdir)
 
     # Assert
-    m_mkdir.assert_called_once_with(Path("./backend_data/"))
+    is_dir_mock.assert_called_once()
+    mkdir_mock.assert_called_once()
 
 
 def test_database_create_attendance():

@@ -19,6 +19,10 @@ class AttendanceDoesNotExist(Exception):
 # (though we can implement them as stubs if needed)
 
 
+class Database(DatabaseInterface):
+    ATTENDANCE_DATABASE_PATH: Path
+
+
 class Database:
     """A Database to store Attendances"""
 
