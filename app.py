@@ -19,6 +19,9 @@ def hello_world():
 @app.route("/api/attendance/<int:attendance_id>")
 def attendance(attendance_id):
 
-    val = db.get_attendance(attendance_id)
+    try:
+        val = db.get_attendance(attendance_id)
+    except:
+        return "<h2>404 Not Found<h2>"
 
     return val
