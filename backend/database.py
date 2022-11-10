@@ -93,4 +93,10 @@ class Database:
             return attendance
 
     def get_summary_attendance(self) -> List[str]:
-        pass  # For FEATURE #14: Fill out this function
+        files = [
+            f.stem
+            for f in self.attendance_database_folder.glob("*.json")
+            if f.is_file()
+        ]
+
+        return files
