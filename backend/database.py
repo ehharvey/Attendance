@@ -13,6 +13,10 @@ class AttendanceDoesNotExist(Exception):
     """Exception when Attendance item does not exist (but it should)"""
 
 
+class AttendanceDoesNotExist(Exception):
+    """Exception when Attendance item does not exist (but it should)"""
+
+
 class AttendanceIsMalformed(Exception):
     """Exception when read Attendance data is malformed"""
 
@@ -40,10 +44,9 @@ class Database:
         To update an already existing attendance item, use update_attendance
         """
 
-        full_path_name = self.attendance_database_folder / \
-            (attendance.id + ".json")
+        full_path_name = self.attendance_database_folder / (attendance.id + ".json")
 
-        if (full_path_name.is_file()):
+        if full_path_name.is_file():
             raise AttendanceAlreadyExists
 
         with full_path_name.open("w") as f:
@@ -54,8 +57,7 @@ class Database:
         Updates an *existing* Attendance item with a new one
         """
 
-        full_path_name = self.attendance_database_folder / \
-            (attendance.id + ".json")
+        full_path_name = self.attendance_database_folder / (attendance.id + ".json")
 
         if not (full_path_name.is_file()):
             raise AttendanceDoesNotExist
@@ -86,7 +88,8 @@ class Database:
 
             try:
                 attendance = Attendance(
-                    id=parsed_json["id"], records=parsed_json["records"])
+                    id=parsed_json["id"], records=parsed_json["records"]
+                )
             except ValidationError as exc:
                 raise AttendanceIsMalformed from exc
 
