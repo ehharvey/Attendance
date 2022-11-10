@@ -1,22 +1,20 @@
 import json
-import os
-from os import mkdir
 from pathlib import Path
-from typing import List
+from pydantic import ValidationError
 
 from .attendance import Attendance
 
 
 class AttendanceAlreadyExists(Exception):
     """Exception when Attendance item already exists"""
-    pass
 
 
 class AttendanceDoesNotExist(Exception):
     """Exception when Attendance item does not exist (but it should)"""
 
-# We implement interfaces here. Avoid having direct implementations in classes marked ...Interfcace
-# (though we can implement them as stubs if needed)
+
+class AttendanceIsMalformed(Exception):
+    """Exception when read Attendance data is malformed"""
 
 
 class Database:
@@ -45,8 +43,6 @@ class Database:
         full_path_name = self.attendance_database_folder / \
             (attendance.id + ".json")
 
-        # When opening files, use this approach [with open(...)]
-        # This will automatically close the file at the end of the scope
         if (full_path_name.is_file()):
             raise AttendanceAlreadyExists
 
@@ -69,16 +65,29 @@ class Database:
             f.write(attendance.json())
 
     def get_attendance(self, id: str) -> Attendance:
-        """Retrieves an existing Attendance item"""
+        """
+        Retrieves an existing Attendance item
+
+        Raises AttendanceDoesNotExist if supplied id does not match any stored attendances
+
+        Raises AttendanceIsMalformed is read Attendance is malformed
+        """
 
         full_path_name = self.attendance_database_folder / (id + ".json")
         if not (full_path_name.is_file()):
             raise AttendanceDoesNotExist
 
-        # if it doesn't exist I can create the file and store it
-        # if it doesn't exist I can create the file and store it
         with full_path_name.open("r") as f:
-            myDataString = f.read()
-            data = json.loads(myDataString)
-            attendance = Attendance(id=data["id"], records=data["records"])
+            file_text = f.read()
+            parsed_json = json.loads(file_text)
+
+            if not isinstance(parsed_json, dict):
+                raise AttendanceIsMalformed
+
+            try:
+                attendance = Attendance(
+                    id=parsed_json["id"], records=parsed_json["records"])
+            except ValidationError as exc:
+                raise AttendanceIsMalformed from exc
+
             return attendance
