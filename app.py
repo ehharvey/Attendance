@@ -22,6 +22,6 @@ def attendance(attendance_id):
     try:
         val = db.get_attendance(attendance_id)
     except:
-        return "<h2>404 Not Found<h2>"
+        return "<h2>404 Not Found<h2>", 404
 
     return val
