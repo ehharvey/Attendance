@@ -24,8 +24,8 @@ def test_database_init():
     mock_path = Path()
 
     with (
-        patch.object(Path, 'mkdir') as mkdir_mock,
-        patch.object(Path, "is_dir") as is_dir_mock
+        patch.object(Path, "mkdir") as mkdir_mock,
+        patch.object(Path, "is_dir") as is_dir_mock,
     ):
         is_dir_mock.return_value = False
         mkdir_mock.return_value = None
@@ -44,7 +44,7 @@ def test_database_create_attendance():
 
     Constructor mocks: no issue
 
-    database file: does not exist    
+    database file: does not exist
     """
 
     # Arrange
@@ -53,11 +53,10 @@ def test_database_create_attendance():
 
     # This mocks the mock_database_directory
     with (
-        patch.object(Path, 'mkdir') as mkdir_mock,
+        patch.object(Path, "mkdir") as mkdir_mock,
         patch.object(Path, "is_dir") as is_dir_mock,
-
         # Used by create_attendance to derive new paths
-        patch.object(Path, "__truediv__") as divide_mock
+        patch.object(Path, "__truediv__") as divide_mock,
     ):
         is_dir_mock.return_value = False
         mkdir_mock.return_value = None
@@ -71,7 +70,7 @@ def test_database_create_attendance():
 
         with (
             patch.object(Path, "is_file") as is_file_mock,
-            patch.object(Path, "open", open_mock)
+            patch.object(Path, "open", open_mock),
         ):
             is_file_mock.return_value = False
 
@@ -83,3 +82,35 @@ def test_database_create_attendance():
             is_dir_mock.assert_called_once()
             mkdir_mock.assert_called_once()
             open_mock.assert_called_once_with("w")
+
+
+def test_get_summary_attendance():
+    # Arrange
+    mock_database_directory = Path()
+    attendance_mock = AttendanceMock()
+
+    # This mocks the mock_database_directory
+    with (
+        patch.object(Path, "mkdir") as mkdir_mock,
+        patch.object(Path, "is_dir") as is_dir_mock,
+        # Used by create_attendance to derive new paths
+        patch.object(Path, "__truediv__") as divide_mock,
+        patch.object(Path, "glob") as glob_mock,
+    ):
+        is_dir_mock.return_value = False
+        mkdir_mock.return_value = None
+
+        # Mock the database file itself
+        database_file_mock = Path()
+        glob_mock.return_value = iter([database_file_mock])
+
+        with (
+            patch.object(Path, "stem", "test"),
+            patch.object(Path, "is_file", return_value=True),
+        ):
+            # Act
+            database = Database(mock_database_directory)
+            actual = database.get_summary_attendance()
+
+            # Assert
+            assert actual == ["test"]
