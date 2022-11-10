@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import List
 from pydantic import ValidationError
 
 from .attendance import Attendance
@@ -94,3 +95,12 @@ class Database:
                 raise AttendanceIsMalformed from exc
 
             return attendance
+
+    def get_summary_attendance(self) -> List[str]:
+        files = [
+            f.stem
+            for f in self.attendance_database_folder.glob("*.json")
+            if f.is_file()
+        ]
+
+        return files
