@@ -27,7 +27,7 @@ def getSummaryAttendance():
 
     result = db.get_summary_attendance()
 
-    return {"records": result}, 200  # tuple, return code
+    return {"ids": result}, 200  # tuple, return code
 
 
 @app.route("/api/attendance/<int:attendance_id>", methods=["GET", "POST"])
