@@ -14,6 +14,10 @@ class AttendanceDoesNotExist(Exception):
     """Exception when Attendance item does not exist (but it should)"""
 
 
+class AttendanceDoesNotExist(Exception):
+    """Exception when Attendance item does not exist (but it should)"""
+
+
 class AttendanceIsMalformed(Exception):
     """Exception when read Attendance data is malformed"""
 

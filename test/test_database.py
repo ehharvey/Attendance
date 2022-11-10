@@ -21,8 +21,9 @@ def test_database_init():
     """Tests constructor"""
 
     # Arrange
-    mock_path = Path()
+    mock_database_directory = Path()
 
+    # This mocks the mock_database_directory
     with (
         patch.object(Path, "mkdir") as mkdir_mock,
         patch.object(Path, "is_dir") as is_dir_mock,
@@ -31,7 +32,7 @@ def test_database_init():
         mkdir_mock.return_value = None
 
         # Act
-        database = Database(mock_path)
+        database = Database(mock_database_directory)
 
         # Assert
         is_dir_mock.assert_called_once()
