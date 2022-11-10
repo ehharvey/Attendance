@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Attendance</title>
     <script src="scripts/index.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style src="style/style.css"></style>
 </head>
+
 <body onload="logConsole()">
 
-<h1>Attendance Module Homepage</h1>
+    <h1>Attendance Module Homepage</h1>
 
-<p>Hello World</p>
+    <p>Hello World</p>
 
 
-<button onclick="getClasslist()">Get Classlist Data</button> 
-<br />
-<button onclick="getCalendarEvent()">Get Calendar Data</button>
-<br />
-<button onclick="getBackend()">Test Backend</button>
+    <button onclick="getClasslist()">Get Classlist Data</button>
+    <br />
+    <button onclick="getCalendarEvent()">Get Calendar Data</button>
+    <br />
+    <button onclick="getBackend()">Test Backend</button>
+    <br />
+    <br />
+
+    <button onclick="addAttendance(document.getElementById('attendanceID').value)">Test Adding new Attendance
+        Item</button>
+    <label for="fname">Attendance ID:</label>
+    <input type="text" id="attendanceID" name="attendanceID"><br><br>
+
 
 
 </body>
-</html>
 
+</html>
