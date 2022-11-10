@@ -19,11 +19,25 @@ def test_database_init():
     """Tests constructor"""
 
     # Arrange
-    database = Database(mkdir=m_mkdir)
+    mock_database_directory = Path()
 
-    # Assert
-    is_dir_mock.assert_called_once()
-    mkdir_mock.assert_called_once()
+    # This mocks the mock_database_directory
+    with (
+        patch.object(Path, 'mkdir') as mkdir_mock,
+        patch.object(Path, "is_dir") as is_dir_mock,
+
+        # Used by create_attendance to derive new paths
+        patch.object(Path, "__truediv__") as divide_mock
+    ):
+        is_dir_mock.return_value = False
+        mkdir_mock.return_value = None
+
+        # Act
+        database = Database(mock_database_directory)
+
+        # Assert
+        is_dir_mock.assert_called_once()
+        mkdir_mock.assert_called_once()
 
 
 def test_database_create_attendance():
