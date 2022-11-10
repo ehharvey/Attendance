@@ -7,7 +7,6 @@ from backend.database import AttendanceAlreadyExists
 from backend.attendance import Attendance
 
 
-
 app = Flask(__name__)
 cors = CORS(app)
 CORS(app)
@@ -22,21 +21,21 @@ def hello_world():
     return "Attendance Backend says Hello World!"
 
 
-
-@app.route("/api/attendance/<int:attendance_id>", methods=['GET', 'POST'])
+@app.route("/api/attendance/<int:attendance_id>", methods=["GET", "POST"])
 def attendance(attendance_id):
-    if request.method == 'GET':
+    if request.method == "GET":
         val = db.get_attendance(attendance_id)
         return val
-    if request.method == 'POST':
+    if request.method == "POST":
         request_json = request.get_json()
-        attendance_object = Attendance(id=request_json.get(
-            'id'), records=[request_json.get('records')])
+        attendance_object = Attendance(
+            id=request_json.get("id"), records=[request_json.get("records")]
+        )
         try:
             db.create_attendance(attendance_object)
         except AttendanceAlreadyExists:
             return "Attendance Item already exists"
 
         return "Successfully added attendance item"
-
-
+    else:
+        return "Invalid Method", 400
