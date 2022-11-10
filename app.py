@@ -1,10 +1,10 @@
-from flask import Flask # For web server
+from flask import Flask  # For web server
 from flask_cors import CORS
 from backend.database import Database
+
 app = Flask(__name__)
 cors = CORS(app)
 CORS(app)
-
 
 database: Database = Database()
 
@@ -20,8 +20,6 @@ def hello_world():
 def getSummaryAttendance():
     """Get Summary List of Attendances"""
 
-    result = database.getSummaryAttendance()
+    result = database.get_summary_attendance()
 
-    return {
-        "records": result
-    }, 200 # tuple, return code
+    return {"records": result}, 200  # tuple, return code

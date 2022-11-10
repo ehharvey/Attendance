@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 from backend.database import Database
-from unittest.mock import MagicMock, mock_open
+from unittest.mock import MagicMock, mock_open, patch
 
 
 # Mock for Attendance
@@ -12,32 +12,74 @@ class AttendanceMock:
 
     def json(self):
         return self._payload
+
+
 ########################
 
 
 def test_database_init():
-    m_mkdir = MagicMock(return_value = None)
+    """Tests constructor"""
 
     # Arrange
-    database = Database(mkdir = m_mkdir)
+    mock_path = Path()
 
-    # Assert
-    m_mkdir.assert_called_once_with(Path("./backend_data/"))
+    with (
+        patch.object(Path, 'mkdir') as mkdir_mock,
+        patch.object(Path, "is_dir") as is_dir_mock
+    ):
+        is_dir_mock.return_value = False
+        mkdir_mock.return_value = None
+
+        # Act
+        database = Database(mock_path)
+
+        # Assert
+        is_dir_mock.assert_called_once()
+        mkdir_mock.assert_called_once()
 
 
-def test_database_createAttendance():
-    m_mkdir = MagicMock(return_value = None)
-    m_open: MagicMock = mock_open()
+def test_database_create_attendance():
+    """
+    Tests create_attendance
 
+    Constructor mocks: no issue
 
-    attendance = AttendanceMock()
+    database file: does not exist    
+    """
 
     # Arrange
-    database = Database(mkdir=m_mkdir)
+    mock_database_directory = Path()
+    attendance_mock = AttendanceMock()
 
-    # Act
-    database.createAttendance(attendanceObject=attendance, open = m_open)
+    # This mocks the mock_database_directory
+    with (
+        patch.object(Path, 'mkdir') as mkdir_mock,
+        patch.object(Path, "is_dir") as is_dir_mock,
 
-    # Assert
-    m_open.assert_called_once_with(Path("./backend_data/") / "ID.json", "w")
-    m_open().write.assert_called_once_with("Hello World")
+        # Used by create_attendance to derive new paths
+        patch.object(Path, "__truediv__") as divide_mock
+    ):
+        is_dir_mock.return_value = False
+        mkdir_mock.return_value = None
+
+        # Mock the database file itself
+        database_file_mock = Path()
+        open_mock = mock_open()
+
+        # attendance_database_folder / "ID.json" = database_file_mock
+        divide_mock.return_value = database_file_mock
+
+        with (
+            patch.object(Path, "is_file") as is_file_mock,
+            patch.object(Path, "open", open_mock)
+        ):
+            is_file_mock.return_value = False
+
+            # Act
+            database = Database(mock_database_directory)
+            database.create_attendance(attendance_mock)
+
+            # Assert
+            is_dir_mock.assert_called_once()
+            mkdir_mock.assert_called_once()
+            open_mock.assert_called_once_with("w")

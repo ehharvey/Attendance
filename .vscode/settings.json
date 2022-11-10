@@ -10,13 +10,15 @@
     "git.branchProtection": [
         "main"
     ],
-    "git.branchValidationRegex": "^(documentation|example|feature|bugfix|improvement|library|prerelease|release|hotfix)\\/#[0-9]+$",
+    "git.branchValidationRegex": "^(documentation|example|feature|bugfix|improvement|library|prerelease|release|hotfix)\/#[0-9]+([a-z])?$",
     "git.pullBeforeCheckout": true,
-
     "files.eol": "\n",
     "files.exclude": {
         "**/Attendance.dev/": true
     },
     "task.allowAutomaticTasks": "on",
     "python.linting.banditEnabled": true,
+    "editor.formatOnSave": true,
+    "git.fetchOnPull": true,
+    "git.autofetch": "all",
 }
