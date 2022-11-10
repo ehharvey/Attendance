@@ -1,7 +1,9 @@
+from pathlib import Path
 from flask import Flask  # For web server
 from flask import request
 from flask_cors import CORS, cross_origin
 from backend.database import Database
+import json
 
 from backend.database import AttendanceAlreadyExists
 from backend.attendance import Attendance
@@ -12,6 +14,16 @@ cors = CORS(app)
 CORS(app)
 
 db = Database()
+
+SERVICES_JSON = Path("./services.json")
+
+
+def get_services() -> dict:
+    with SERVICES_JSON.open("r") as f:
+        return json.load(f)
+
+
+SERVICES = get_services()
 
 
 @app.route("/")

@@ -12,3 +12,5 @@ deployment/http.server.logs
 
 node_modules/
 jest_reports/
+
+services.json
