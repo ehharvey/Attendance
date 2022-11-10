@@ -6,7 +6,7 @@ app = Flask(__name__)
 cors = CORS(app)
 CORS(app)
 
-database: Database = Database()
+db = Database()
 
 
 @app.route("/")
@@ -20,6 +20,6 @@ def hello_world():
 def getSummaryAttendance():
     """Get Summary List of Attendances"""
 
-    result = database.get_summary_attendance()
+    result = db.get_summary_attendance()
 
     return {"records": result}, 200  # tuple, return code
