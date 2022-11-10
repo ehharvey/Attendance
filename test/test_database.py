@@ -18,6 +18,8 @@ class AttendanceMock:
 
 
 def test_database_init():
+    """Tests constructor"""
+
     # Arrange
     mock_path = Path()
 
@@ -36,19 +38,48 @@ def test_database_init():
         mkdir_mock.assert_called_once()
 
 
-def test_database_createAttendance():
-    assert True  # TODO
-    # m_mkdir = MagicMock(return_value=None)
-    # m_open: MagicMock = mock_open()
+def test_database_create_attendance():
+    """
+    Tests create_attendance
 
-    # attendance = AttendanceMock()
+    Constructor mocks: no issue
 
-    # # Arrange
-    # database = Database(mkdirFunc=m_mkdir, openFunc=m_open)
+    database file: does not exist    
+    """
 
-    # # Act
-    # database.createAttendance(attendanceObject=attendance, open=m_open)
+    # Arrange
+    mock_database_directory = Path()
+    attendance_mock = AttendanceMock()
 
-    # # Assert
-    # m_open.assert_called_once_with(Path("./backend_data/") / "ID.json", "w")
-    # m_open().write.assert_called_once_with("Hello World")
+    # This mocks the mock_database_directory
+    with (
+        patch.object(Path, 'mkdir') as mkdir_mock,
+        patch.object(Path, "is_dir") as is_dir_mock,
+
+        # Used by create_attendance to derive new paths
+        patch.object(Path, "__truediv__") as divide_mock
+    ):
+        is_dir_mock.return_value = False
+        mkdir_mock.return_value = None
+
+        # Mock the database file itself
+        database_file_mock = Path()
+        open_mock = mock_open()
+
+        # attendance_database_folder / "ID.json" = database_file_mock
+        divide_mock.return_value = database_file_mock
+
+        with (
+            patch.object(Path, "is_file") as is_file_mock,
+            patch.object(Path, "open", open_mock)
+        ):
+            is_file_mock.return_value = False
+
+            # Act
+            database = Database(mock_database_directory)
+            database.create_attendance(attendance_mock)
+
+            # Assert
+            is_dir_mock.assert_called_once()
+            mkdir_mock.assert_called_once()
+            open_mock.assert_called_once_with("w")
