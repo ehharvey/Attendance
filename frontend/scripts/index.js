@@ -34,12 +34,33 @@ module.exports.getCalendar = function getCalendarEvent() {
 }
 
 function getBackend() {
-    logConsole("Getting Backend");
+    exports.console_log("Getting Backend");
     // 192.168.2.103
     const Url = 'http://192.168.2.103:5000';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
+    alert(xmlHttp.responseText);
+}
+
+function addAttendance() {
+    exports.console_log("Sending Backend Attendance");
+    const attendance_json = {   //placeholder attendance data
+        "id": "1234",
+        "records": {
+            "studentID": "ABC",
+            "isPresent": true
+        }
+    }
+    //const Url = 'http://192.168.2.103:5000/api/attendance/' + attendance_json.id;
+    const Url = 'http://127.0.0.1:5000/api/attendance/' + attendance_json.id; //localhost ip, change for class
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", Url, false); // false for synchronous request
+
+    exports.console_log(attendance_json); //log json object for debugging purposes
+
+    xmlHttp.setRequestHeader("Content-Type", "application/json");
+    xmlHttp.send(JSON.stringify(attendance_json));
     alert(xmlHttp.responseText);
 }
 
