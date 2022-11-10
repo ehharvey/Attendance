@@ -43,10 +43,10 @@ function getBackend() {
     alert(xmlHttp.responseText);
 }
 
-function addAttendance() {
-    exports.console_log("Sending Backend Attendance");
+function addAttendance(attendance_ID) {
+    //exports.console_log("Sending Backend Attendance");
     const attendance_json = {   //placeholder attendance data
-        "id": "1234",
+        "id": attendance_ID,
         "records": {
             "studentID": "ABC",
             "isPresent": true
@@ -57,7 +57,7 @@ function addAttendance() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
-    exports.console_log(attendance_json); //log json object for debugging purposes
+    console.log(attendance_json); //log json object for debugging
 
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));

@@ -2,6 +2,7 @@ from flask import Flask  # For web server
 from flask import request
 from flask_cors import CORS, cross_origin
 from backend.database import Database
+from backend.database import AttendanceAlreadyExists
 from backend.attendance import Attendance
 
 app = Flask(__name__)
@@ -29,7 +30,7 @@ def attendance(attendance_id):
             'id'), records=[request_json.get('records')])
         try:
             db.create_attendance(attendance_object)
-        except:
-            return "<h2> 404 Not Found<h2>", 404
+        except AttendanceAlreadyExists:
+            return "Attendance Item already exists"
 
         return "Successfully added attendance item"
