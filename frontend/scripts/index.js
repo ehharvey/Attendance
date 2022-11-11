@@ -14,6 +14,8 @@ module.exports.console_log = function logConsole(loggingValue) {
 
 }
 
+attendanceIP = 'http://127.0.0.1:5000/api/attendance/'
+
 function getClasslist() {
     //this.logConsole("Getting Class List");
     const Url = 'http://192.168.2.104:27501/students';
@@ -53,7 +55,7 @@ function addAttendance(attendance_ID) {
         }
     }
     //const Url = 'http://192.168.2.103:5000/api/attendance/' + attendance_json.id;
-    const Url = 'http://127.0.0.1:5000/api/attendance/' + attendance_json.id; //localhost ip, change for class
+    const Url = attendanceIP + attendance_json.id; //localhost ip, change for class
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
