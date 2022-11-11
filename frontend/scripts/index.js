@@ -1,20 +1,5 @@
-module.exports.console_log = function logConsole(loggingValue) {
-    //Gets the date time
-    if (loggingValue) {
-        const d = Date();
-        console.log("[" + loggingValue + "] " + d);
-        return ("[" + loggingValue + "] " + d);
-    }
-    else {
-        //logging page load
-        const d = Date();
-        console.log("[Page Load]" + " " + d);
-        return ("[Page Load]" + " " + d);
-    }
-
-}
-
 attendanceIP = 'http://127.0.0.1:5000/api/attendance/'
+
 
 function getClasslist() {
     //this.logConsole("Getting Class List");
@@ -45,6 +30,15 @@ function getBackend() {
     alert(xmlHttp.responseText);
 }
 
+function getSummary() {
+    //const Url = 'http://192.168.2.103:5000/api/attendance';//swap IP for class
+    const Url = 'http://127.0.0.1:5000/api/attendance';
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", Url, false); // false for synchronous request
+    xmlHttp.send(null);
+    alert(xmlHttp.responseText);
+}
+
 function addAttendance(attendance_ID) {
     //exports.console_log("Sending Backend Attendance");
     const attendance_json = {   //placeholder attendance data
@@ -66,12 +60,27 @@ function addAttendance(attendance_ID) {
     alert(xmlHttp.responseText);
 }
 
+
 /*------------------------------------------------------------------------------------------
 * Function	        :	logConsole()
 * Description	    :	This Function is used to log request and responses to the console.			
 * Parameters	    :	String : the request or response to log to the console
 * ------------------------------------------------------------------------------------------*/
+module.exports.console_log = function logConsole(loggingValue) {
+    //Gets the date time
+    if (loggingValue) {
+        const d = Date();
+        console.log("[" + loggingValue + "] " + d);
+        return ("[" + loggingValue + "] " + d);
+    }
+    else {
+        //logging page load
+        const d = Date();
+        console.log("[Page Load]" + " " + d);
+        return ("[Page Load]" + " " + d);
+    }
 
+}
 
 module.exports.add = function add(a, b) {
     return a + b;
