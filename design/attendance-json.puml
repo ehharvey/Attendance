@@ -1,9 +1,0 @@
-@startjson
-{
-  "id": "C1",
-  "records": [
-      { "studentID": "s1", "isPresent": "True" }, { "studentID": "s2", "isPresent": "False" },
-      { "studentID": "s3", "isPresent": "True" }, { "studentID": "s4", "isPresent": "False" }
-  ]
-}
-@endjson
