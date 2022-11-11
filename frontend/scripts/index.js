@@ -1,18 +1,15 @@
-attendanceIP = 'http://127.0.0.1:5000/api/attendance/'
-
-
 function getClasslist() {
     //this.logConsole("Getting Class List");
-    const Url = 'http://192.168.2.104:27501/students';
+    const Url = '/api/classlist';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
     alert(xmlHttp.responseText);
 }
 
-module.exports.getCalendar = function getCalendarEvent() {
+function getCalendarEvent() {
     //logConsole("Getting Calendar Event");
-    const Url = 'http://192.168.2.101:27501/nextevent';
+    const Url = '/api/calendar';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
@@ -20,19 +17,9 @@ module.exports.getCalendar = function getCalendarEvent() {
     return xmlHttp
 }
 
-function getBackend() {
-    exports.console_log("Getting Backend");
-    // 192.168.2.103
-    const Url = 'http://192.168.2.103:5000';
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", Url, false); // false for synchronous request
-    xmlHttp.send(null);
-    alert(xmlHttp.responseText);
-}
-
 function getSummary() {
     //const Url = 'http://192.168.2.103:5000/api/attendance';//swap IP for class
-    const Url = 'http://127.0.0.1:5000/api/attendance';
+    const Url = '/api/attendance';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
@@ -49,7 +36,7 @@ function addAttendance(attendance_ID) {
         }
     }
     //const Url = 'http://192.168.2.103:5000/api/attendance/' + attendance_json.id;
-    const Url = attendanceIP + attendance_json.id; //localhost ip, change for class
+    const Url = '/api/attendance/' + attendance_json.id; //localhost ip, change for class
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
@@ -66,7 +53,7 @@ function addAttendance(attendance_ID) {
 * Description	    :	This Function is used to log request and responses to the console.			
 * Parameters	    :	String : the request or response to log to the console
 * ------------------------------------------------------------------------------------------*/
-module.exports.console_log = function logConsole(loggingValue) {
+function logConsole(loggingValue) {
     //Gets the date time
     if (loggingValue) {
         const d = Date();
@@ -80,10 +67,6 @@ module.exports.console_log = function logConsole(loggingValue) {
         return ("[Page Load]" + " " + d);
     }
 
-}
-
-module.exports.add = function add(a, b) {
-    return a + b;
 }
 
 
