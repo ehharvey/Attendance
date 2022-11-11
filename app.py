@@ -1,6 +1,6 @@
 from pathlib import Path
 from flask import Flask  # For web server
-from flask import request
+from flask import request, send_from_directory, send_file
 from flask_cors import CORS, cross_origin
 from backend.database import Database
 import json
@@ -38,9 +38,17 @@ def get_services_url(theService: str, theRoute: str) -> str:
 
 @app.route("/")
 def hello_world():
-    """Basic Hello World"""
+    return send_file("./frontend/index.html")
 
-    return "Attendance Backend says Hello World!"
+
+@app.route("/scripts/<path:path>")
+def send_script(path: Path):
+    return send_from_directory("./frontend/scripts", path)
+
+
+@app.route("/style/<path:path>")
+def send_style(path: Path):
+    return send_from_directory("./frontend/style", path)
 
 
 @app.route("/api/attendance", methods=["GET"])
