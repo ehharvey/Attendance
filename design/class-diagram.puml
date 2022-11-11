@@ -1,15 +1,13 @@
 @startuml
 class Database {
-ATTENDANCE_DATABASE_PATH: str
-mkdir: func
-isfile: func
-open: func
+database_directory: Path
 ----
-__init__(ATTENDANCE_DATABASE_PATH, mkdir, isfile, open)
-createAttendance(attendance: Attendance)
-updateAttendance(attendance: Attendance)
-getAttendance(id: str)
-deleteAttendance(id: str)
+__init__(database_directory)
+create_attendance(attendance: Attendance)
+update_attendance(attendance: Attendance)
+get_attendance(id: str): Attendance
+get_get_summary_attendance(): List[str]
+delete_attendance(id: str) # NOT IMPLEMENTED
 }
 
 
