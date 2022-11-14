@@ -1,9 +1,9 @@
-// ALL TESTS deleted since it breaks our website haha
+const functionA = require('../../frontend/scripts/index');
 
-// test('Tests function consoleLog - empty', () => {
-//     const d = Date();
-//     expect(logConsole()).toBe("[Page Load]" + " " + d);
-// });
+test('Tests function consoleLog - empty', () => {
+    const d = Date();
+    expect(functionA()).toBe("[Page Load]" + " " + d);
+});
 
 // test('Tests function consoleLog - empty', () => {
 //     const d = Date();

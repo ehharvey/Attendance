@@ -66,7 +66,7 @@ function logConsole(loggingValue) {
         console.log("[Page Load]" + " " + d);
         return ("[Page Load]" + " " + d);
     }
-
 }
 
+module.exports = functionA;
 
