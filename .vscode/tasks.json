@@ -9,14 +9,16 @@
             "command": "python3 -m http.server -d ./frontend/"
         },
         {
-        "label": "Run startup script",
-        "type": "shell",
-        "command": "./Attendance.dev/utility-scripts/postAttachCommand.sh",
-        "presentation": {
-            "reveal": "always",
-            "panel": "new"
-        },
-        "runOptions": { "runOn": "folderOpen" }
+            "label": "Run startup script",
+            "type": "shell",
+            "command": "rm -rf Attendance.dev/ && git clone https://github.com/CSCN73030-projectv-group9/Attendance.dev.git && ./Attendance.dev/utility-scripts/postAttachCommand.sh",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
         }
     ]
 }
