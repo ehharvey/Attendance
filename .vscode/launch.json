@@ -26,7 +26,7 @@
                 "--no-debugger",
                 "--no-reload",
                 "--port",
-                "8080"
+                "5000"
             ],
             "jinja": true,
             "justMyCode": true
