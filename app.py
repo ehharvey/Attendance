@@ -88,6 +88,9 @@ def getClasslist():
             f"http://{CLASSLIST_SERVICE.ip}:{CLASSLIST_SERVICE.port}/students",
             timeout=3,
         )
+
+        return response.content, 200
+
     except Exception as e:
         return str(e), 500
 
