@@ -1,0 +1,14 @@
+#jest test frontend_functions
+
+step 1: Open a terminal
+step 2: select the path of the file you are test example ../js_tests/frontend_functions.test.js_tests
+step 3: run the command 
+
+You should now see the tests work and give you the result 
+
+Note: to see the test coverage and test result add --coverage to the json file in the test: "jest" keyvalue pair.
+
+#Testing the backend
+
+Go to view -> test -> run test with the play button.
+
