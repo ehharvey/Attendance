@@ -99,7 +99,8 @@ def getCalendar():
         response = requests.get(
             f"http://{CALENDAR_SERVICE.ip}:{CALENDAR_SERVICE.port}/event", timeout=3
         )
-        # if response.status_code == 200:
-        # return "Successfully found the classlist", 200
+
+        return response.content, 200
+
     except Exception as e:
         return str(e), 500
