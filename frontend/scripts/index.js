@@ -1,5 +1,5 @@
 function getClasslist() {
-    //this.logConsole("Getting Class List");
+    logConsole("Getting Class List");
     const Url = '/api/classlist';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
@@ -8,7 +8,7 @@ function getClasslist() {
 }
 
 function getCalendarEvent() {
-    //logConsole("Getting Calendar Event");
+    logConsole("Getting Calendar Event");
     const Url = '/api/calendar';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
@@ -27,7 +27,7 @@ function getSummary() {
 }
 
 function addAttendance(attendance_ID) {
-    //exports.console_log("Sending Backend Attendance");
+    logConsole("Sending Backend Attendance");
     const attendance_json = {   //placeholder attendance data
         "id": attendance_ID,
         "records": {
@@ -40,7 +40,7 @@ function addAttendance(attendance_ID) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
-    console.log(attendance_json); //log json object for debugging
+    logConsole(attendance_json); //log json object for debugging
 
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
@@ -66,7 +66,9 @@ function logConsole(loggingValue) {
         console.log("[Page Load]" + " " + d);
         return ("[Page Load]" + " " + d);
     }
-
 }
 
+module.exports = {
+    logConsole, addAttendance
+};
 
