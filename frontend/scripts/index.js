@@ -1,6 +1,18 @@
+// This function corrects route
+// requests to account for proxies
+// (e.g., when running in the web VM)
+function getRoute(route, route_prepend = window.location.pathname) {
+    if (route.startsWith("/")) {
+        return route_prepend + route.substring(1);
+    }
+    else {
+        return route_prepend + route;
+    }
+}
+
 function getClasslist() {
     logConsole("Getting Class List");
-    const Url = '/api/classlist';
+    const Url = getRoute('api/classlist');
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
@@ -9,7 +21,7 @@ function getClasslist() {
 
 function getCalendarEvent() {
     logConsole("Getting Calendar Event");
-    const Url = '/api/calendar';
+    const Url = getRoute('/api/calendar');
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
@@ -19,7 +31,7 @@ function getCalendarEvent() {
 
 function getSummary() {
     //const Url = 'http://192.168.2.103:5000/api/attendance';//swap IP for class
-    const Url = '/api/attendance';
+    const Url = getRoute('/api/attendance');
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
@@ -36,7 +48,7 @@ function addAttendance(attendance_ID) {
         }
     }
     //const Url = 'http://192.168.2.103:5000/api/attendance/' + attendance_json.id;
-    const Url = '/api/attendance/' + attendance_json.id; //localhost ip, change for class
+    const Url = getRoute('/api/attendance/' + attendance_json.id); //localhost ip, change for class
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
@@ -69,6 +81,5 @@ function logConsole(loggingValue) {
 }
 
 module.exports = {
-    logConsole, addAttendance
+    logConsole, addAttendance, getRoute
 };
-
