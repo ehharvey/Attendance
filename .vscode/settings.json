@@ -22,4 +22,5 @@
     "git.fetchOnPull": true,
     "git.autofetch": "all",
     "python.formatting.provider": "black",
+    "terminal.integrated.defaultProfile.linux": "bash",
 }
