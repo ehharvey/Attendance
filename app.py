@@ -38,9 +38,19 @@ CLASSLIST_SERVICE = SERVICES.get("classlist")
 SERVICE_TIMEOUT = 3  # seconds before we quit trying to communicate with others
 
 
-@app.route("/")
+@app.route("/old")
 def hello_world():
     return send_file("./frontend/index.html")
+
+
+@app.route("/")
+def teacher_view():
+    return send_file("./frontend/Teacher-View.html")
+
+
+@app.route("/images/<path:path>")
+def send_image(path: Path):
+    return send_from_directory("./frontend/images", path)
 
 
 @app.route("/scripts/<path:path>")
@@ -88,6 +98,9 @@ def getClasslist():
             f"http://{CLASSLIST_SERVICE.ip}:{CLASSLIST_SERVICE.port}/students",
             timeout=3,
         )
+
+        return response.content, 200
+
     except Exception as e:
         return str(e), 500
 

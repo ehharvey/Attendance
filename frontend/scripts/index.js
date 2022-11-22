@@ -5,6 +5,7 @@ function getClasslist() {
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
     alert(xmlHttp.responseText);
+    return xmlHttp;
 }
 
 function getCalendarEvent() {
@@ -14,7 +15,7 @@ function getCalendarEvent() {
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
     alert(xmlHttp.responseText);
-    return xmlHttp
+    return xmlHttp;
 }
 
 function getSummary() {
@@ -24,6 +25,7 @@ function getSummary() {
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
     alert(xmlHttp.responseText);
+    return xmlHttp;
 }
 
 function addAttendance(attendance_ID) {
@@ -45,8 +47,24 @@ function addAttendance(attendance_ID) {
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
     alert(xmlHttp.responseText);
+    return xmlHttp;
 }
 
+function fillAttendanceDropdown() {
+    const dropDown = document.getElementById("select-5c86");
+    const options = dropDown.getElementsByTagName("option");
+    const attendance_json = JSON.parse(getSummary().responseText);
+    console.log(attendance_json);
+    for (let i = 0; i < attendance_json.ids.length; i++) {
+        const newOption = document.createElement("option");
+        newOption.innerText = "Attendance " + attendance_json.ids[i];
+        dropDown.appendChild(newOption);
+    }
+    //options[0].innerText = "Attendance " + attendance_json.ids[0];
+    //options[1].innerText = "Attendance " + attendance_json.ids[1];
+    //options[2].innerText = "test";
+    //console.log(options);
+}
 
 /*------------------------------------------------------------------------------------------
 * Function	        :	logConsole()
