@@ -11,7 +11,7 @@
         {
             "label": "Run startup script",
             "type": "shell",
-            "command": "rm -rf Attendance.dev/ && git clone https://github.com/CSCN73030-projectv-group9/Attendance.dev.git && ./Attendance.dev/utility-scripts/postAttachCommand.sh",
+            "command": "echo "PATH=$PATH:~/.local/bin" >> ~/.bashrc && rm -rf Attendance.dev/ && git clone https://github.com/CSCN73030-projectv-group9/Attendance.dev.git && ./Attendance.dev/utility-scripts/postAttachCommand.sh",
             "presentation": {
                 "reveal": "always",
                 "panel": "new"
