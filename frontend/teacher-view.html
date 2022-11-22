@@ -28,7 +28,7 @@
   <meta property="og:type" content="website">
 </head>
 
-<body class="u-body u-overlap u-xl-mode" data-lang="en" onload="fillAttendanceDropdown()">
+<body class="u-body u-overlap u-xl-mode" data-lang="en" onload="fillAttendanceDropdown(), fillStudentList()">
   <header class="u-clearfix u-header" id="sec-69df" data-animation-name="" data-animation-duration="0"
     data-animation-delay="0" data-animation-direction="">
     <div class="u-clearfix u-sheet u-sheet-1">
@@ -295,7 +295,7 @@
                       <th class="u-border-1 u-border-palette-4-base u-table-cell">Student Number</th>
                     </tr>
                   </thead>
-                  <tbody class="u-table-body">
+                  <tbody class="u-table-body" id="studentList">
                     <tr style="height: 75px;">
                       <td class="u-border-1 u-border-grey-30 u-first-column u-grey-5 u-table-cell u-table-cell-39">Row 1
                       </td>
