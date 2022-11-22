@@ -19,7 +19,7 @@ test('Tests getRoute Proxied', () => {
 });
 
 test('Tests getRoute Unproxied', () => {
-    prepend = "//";
+    prepend = "/";
     route = "/api/attendance";
     EXPECTED = "/api/attendance"
     expect(getRoute(route, prepend)).toBe(EXPECTED);
