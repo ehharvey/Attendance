@@ -1,5 +1,5 @@
 function getClasslist() {
-    //this.logConsole("Getting Class List");
+    logConsole("Getting Class List");
     const Url = '/api/classlist';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
@@ -9,7 +9,7 @@ function getClasslist() {
 }
 
 function getCalendarEvent() {
-    //logConsole("Getting Calendar Event");
+    logConsole("Getting Calendar Event");
     const Url = '/api/calendar';
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
@@ -29,7 +29,7 @@ function getSummary() {
 }
 
 function addAttendance(attendance_ID) {
-    //exports.console_log("Sending Backend Attendance");
+    logConsole("Sending Backend Attendance");
     const attendance_json = {   //placeholder attendance data
         "id": attendance_ID,
         "records": {
@@ -42,28 +42,24 @@ function addAttendance(attendance_ID) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
-    console.log(attendance_json); //log json object for debugging
+    logConsole(attendance_json); //log json object for debugging
 
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
     alert(xmlHttp.responseText);
-    return xmlHttp;
+    return xmlHttp.responseText;
 }
 
 function fillAttendanceDropdown() {
     const dropDown = document.getElementById("select-5c86");
     const options = dropDown.getElementsByTagName("option");
-    const attendance_json = JSON.parse(getSummary().responseText);
-    console.log(attendance_json);
+    const attendance_json = JSON.parse(getSummary());
+    logConsole(attendance_json);
     for (let i = 0; i < attendance_json.ids.length; i++) {
         const newOption = document.createElement("option");
         newOption.innerText = "Attendance " + attendance_json.ids[i];
         dropDown.appendChild(newOption);
     }
-    //options[0].innerText = "Attendance " + attendance_json.ids[0];
-    //options[1].innerText = "Attendance " + attendance_json.ids[1];
-    //options[2].innerText = "test";
-    //console.log(options);
 }
 
 /*------------------------------------------------------------------------------------------
