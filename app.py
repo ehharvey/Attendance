@@ -95,8 +95,7 @@ def getClasslist():
 
     try:
         response = requests.get(
-            # f"http://{CLASSLIST_SERVICE.ip}:{CLASSLIST_SERVICE.port}/students",
-            "http://127.0.0.1:8080/students",  # FOR COLE TESTING, DELETE LATER
+            f"http://{CLASSLIST_SERVICE.ip}:{CLASSLIST_SERVICE.port}/students",
             timeout=3,
         )
 

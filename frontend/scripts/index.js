@@ -36,7 +36,7 @@ function getSummary() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
-    alert(xmlHttp.responseText);
+    //alert(xmlHttp.responseText);
     return xmlHttp.responseText;
 }
 
@@ -64,7 +64,6 @@ function addAttendance(attendance_ID) {
 function fillAttendanceDropdown() {
     const dropDown = document.getElementById("select-5c86");
     const attendance_json = JSON.parse(getSummary());
-    logConsole(attendance_json);
     for (let i = 0; i < attendance_json.ids.length; i++) {
         const newOption = document.createElement("option");
         newOption.innerText = "Attendance " + attendance_json.ids[i];
@@ -75,7 +74,128 @@ function fillAttendanceDropdown() {
 function fillStudentList() {
     const studentTable = document.getElementById("studentList");
     //const students = JSON.parse(getClasslist());
-    logConsole(getClasslist());
+    const students = JSON.parse('[{"firstname": "Rachel", "lastname": "Le", "email": "RLe3474@conestogac.com", "studentNumber": 34744777 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso1657@conestogac.com", "studentNumber": 36641657 }, { "firstname": "Navdeep", "lastname": "Mangat", "email": "NMangat4464@conestogac.com", "studentNumber": 21334464 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso4673@conestogac.com", "studentNumber": 66504673 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso0266@conestogac.com", "studentNumber": 35400266 }, { "firstname": "Anthony1111", "lastname": "Sasso", "email": "ASasso4162@conestogac.com", "studentNumber": 67504162 }, { "firstname": "Eazaz", "lastname": "Jakda", "email": "EJakda3476@conestogac.com", "studentNumber": 72033476 }, { "firstname": "Navdeep", "lastname": "Mangat", "email": "NMangat5345@conestogac.com", "studentNumber": 1555345 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso6413@conestogac.com", "studentNumber": 37346413 }, { "firstname": "Anthony1111", "lastname": "Sasso", "email": "ASasso561@conestogac.com", "studentNumber": 1334561 }, { "firstname": "Ray", "lastname": "Reddington", "email": "RReddington4034@conestogac.on.ca", "studentNumber": 65274034}]');
+    for (let i = 0; i < students.length; i++) {
+        const newRow = document.createElement("tr");
+        newRow.style = "height: 21px;";
+
+        const newNameCell = document.createElement("td");
+        newNameCell.classList.add("u-border-1", "u-border-grey-30", "u-first-column", "u-grey-5", "u-table-cell", "u-table-cell-39");
+        newNameCell.innerText = students[i].firstname + " " + students[i].lastname;
+
+        const newNumberCell = document.createElement("td");
+        newNumberCell.classList.add("u-border-1", "u-border-grey-30", "u-table-cell");
+        newNumberCell.innerText = students[i].studentNumber;
+
+        newRow.appendChild(newNameCell);
+        newRow.appendChild(newNumberCell);
+        studentTable.appendChild(newRow);
+    }
+}
+
+function fillNextAttendance() {
+    //const nextAttendance = JSON.parse(getCalendarEvent());
+    const nextAttendance = JSON.parse('[{"enterpriseID": 112233, "title": "Unit 2 Quiz", "startDate": "2022-11-24T08:00:00", "dueDate": "2022-11-24T22:00:00", "type": "quiz"}]');
+    //const students = JSON.parse(getClasslist());
+    const students = JSON.parse('[{"firstname": "Rachel", "lastname": "Le", "email": "RLe3474@conestogac.com", "studentNumber": 34744777 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso1657@conestogac.com", "studentNumber": 36641657 }, { "firstname": "Navdeep", "lastname": "Mangat", "email": "NMangat4464@conestogac.com", "studentNumber": 21334464 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso4673@conestogac.com", "studentNumber": 66504673 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso0266@conestogac.com", "studentNumber": 35400266 }, { "firstname": "Anthony1111", "lastname": "Sasso", "email": "ASasso4162@conestogac.com", "studentNumber": 67504162 }, { "firstname": "Eazaz", "lastname": "Jakda", "email": "EJakda3476@conestogac.com", "studentNumber": 72033476 }, { "firstname": "Navdeep", "lastname": "Mangat", "email": "NMangat5345@conestogac.com", "studentNumber": 1555345 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso6413@conestogac.com", "studentNumber": 37346413 }, { "firstname": "Anthony1111", "lastname": "Sasso", "email": "ASasso561@conestogac.com", "studentNumber": 1334561 }, { "firstname": "Ray", "lastname": "Reddington", "email": "RReddington4034@conestogac.on.ca", "studentNumber": 65274034}]');
+
+    const title = document.getElementById("nextAttendanceTitle");
+    const time = document.getElementById("nextAttendanceTime");
+    title.innerText = "Attendance for: " + nextAttendance[0].title;
+    time.innerText = "(ends " + nextAttendance[0].dueDate + ")";
+
+    const form = document.getElementById("attendanceForm");
+
+    for (let i = 0; i < students.length; i++) {
+        //input + label -> inputRows -> wrapper + label -> formGroups ->form
+        const row = document.createElement("div");
+        row.classList.add("u-form-group", "u-form-input-layout-horizontal", "u-form-radiobutton", "u-label-left", "u-form-group-4");
+
+        const rowLabel = document.createElement("label");
+        rowLabel.classList.add("u-label", "u-spacing-10", "u-label-2")
+        rowLabel.innerText = students[i].firstname + " " + students[i].lastname + " - " + students[i].studentNumber;
+
+        const buttonWrapper = document.createElement("div");
+        buttonWrapper.classList.add("u-form-radio-button-wrapper");
+
+        const rowPresent = document.createElement("div");
+        rowPresent.classList.add("u-input-row");
+
+        const presentRadio = document.createElement("input");
+        presentRadio.type = "radio";
+        presentRadio.value = "Absent";
+        presentRadio.required = "required";
+        presentRadio.checked = "checked";
+        presentRadio.name = "radio" + i;
+        const presentLabel = document.createElement("label");
+        presentLabel.htmlFor = "radio" + i;
+        presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+        presentLabel.innerText = "Present";
+
+
+        const rowAbsent = document.createElement("div");
+        rowAbsent.classList.add("u-input-row");
+
+        const absentRadio = document.createElement("input");
+        absentRadio.type = "radio";
+        absentRadio.value = "Absent";
+        absentRadio.required = "required";
+        absentRadio.name = "radio" + i;
+        const absentLabel = document.createElement("label");
+        absentLabel.htmlFor = "radio" + i;
+        absentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+        absentLabel.innerText = "Absent";
+
+        rowPresent.appendChild(presentRadio);
+        rowPresent.appendChild(presentLabel);
+
+        rowAbsent.appendChild(absentRadio);
+        rowAbsent.appendChild(absentLabel);
+
+        buttonWrapper.appendChild(rowPresent);
+        buttonWrapper.appendChild(rowAbsent);
+
+        row.appendChild(rowLabel);
+        row.appendChild(buttonWrapper);
+
+        form.appendChild(row);
+    }
+    const buttonRow = document.createElement("div");
+    buttonRow.classList.add("u-form-group", "u-form-submit", "u-label-left");
+
+    const buttonSpacer = document.createElement("label");
+    buttonSpacer.classList.add("u-label", "u-spacing-10", "u-label-17");
+
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("u-align-left", "u-btn-submit-container");
+
+    const buttonInput = document.createElement("input");
+    buttonInput.type = "submit";
+    buttonInput.value = "submit";
+    buttonInput.classList.add("u-form-control-hidden");
+    buttonInput.onclick = "addAttendance()";
+
+    const buttonMessageSuccess = document.createElement("div");
+    buttonMessageSuccess.classList.add("u-form-send-message", "u-form-send-message-success");
+    buttonMessageSuccess.innerText = "New Attendance has been submitted, thank you!";
+
+    const buttonMessageFailure = document.createElement("div");
+    buttonMessageFailure.classList.add("u-form-send-message", "u-form-send-message-error");
+    buttonMessageFailure.innerText = "Attendance was not submitted, please fix errors and try again.";
+
+    const button = document.createElement("a");
+    button.classList.add("u-btn", "u-btn-round", "u-btn-submit", "u-btn-style", "u-radius-50", "u-btn-2");
+    button.innerText = "Submit";
+
+    buttonContainer.appendChild(button);
+    buttonContainer.appendChild(buttonInput);
+
+    buttonRow.appendChild(buttonSpacer);
+    buttonRow.appendChild(buttonContainer);
+
+    form.appendChild(buttonRow);
+    //form.appendChild(buttonMessageSuccess); commented out because messages were not hidden
+    //form.appendChild(buttonMessageFailure); as intended, will fix later if messages are needed
 }
 /*------------------------------------------------------------------------------------------
 * Function	        :	logConsole()

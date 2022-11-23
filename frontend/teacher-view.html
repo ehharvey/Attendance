@@ -28,7 +28,8 @@
   <meta property="og:type" content="website">
 </head>
 
-<body class="u-body u-overlap u-xl-mode" data-lang="en" onload="fillAttendanceDropdown(), fillStudentList()">
+<body class="u-body u-overlap u-xl-mode" data-lang="en"
+  onload="fillAttendanceDropdown(), fillStudentList(), fillNextAttendance()">
   <header class="u-clearfix u-header" id="sec-69df" data-animation-name="" data-animation-duration="0"
     data-animation-delay="0" data-animation-direction="">
     <div class="u-clearfix u-sheet u-sheet-1">
@@ -190,91 +191,15 @@
           <div class="u-container-style u-tab-pane u-white u-tab-pane-2" id="tab-be89" role="tabpanel"
             aria-labelledby="link-tab-be89">
             <div class="u-container-layout u-container-layout-2">
-              <h4 class="u-text u-text-default u-text-1">Attendance for {next_calendar_event}</h4>
+              <h2 class="u-text u-text-default u-text-1" id="nextAttendanceTitle">Attendance
+                for: {next_calendar_event}</h2>
+              <h3 class="u-text u-text-default u-text-1" id="nextAttendanceTime"> time ending
+              </h3>
               <h6 class="u-text u-text-default u-text-2">Student Name - Student Number</h6>
               <h6 class="u-text u-text-default u-text-3">Present or Absent</h6>
               <div class="u-align-center u-form u-form-2">
                 <form action="" class="u-clearfix u-form-spacing-17 u-form-vertical u-inner-form" source="email"
-                  name="form" style="padding: 7px;">
-                  <div
-                    class="u-form-group u-form-input-layout-horizontal u-form-radiobutton u-label-left u-form-group-3">
-                    <label class="u-label u-spacing-10 u-label-2">Student A - 11111 </label>
-                    <div class="u-form-radio-button-wrapper">
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-3" value="Present" required="required" checked="checked">
-                        <label class="u-label u-spacing-10 u-label-3" for="radiobutton-3">Present</label>
-                      </div>
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-3" value="Absent" required="required">
-                        <label class="u-label u-spacing-10 u-label-4" for="radiobutton-3">Absent</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="u-form-group u-form-input-layout-horizontal u-form-radiobutton u-label-left u-form-group-4">
-                    <label class="u-label u-spacing-10 u-label-5">Student B - 22222</label>
-                    <div class="u-form-radio-button-wrapper">
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-5" value="Present" required="required" checked="checked">
-                        <label class="u-label u-spacing-10 u-label-6" for="radiobutton-5">Present</label>
-                      </div>
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-5" value="Absent" required="required">
-                        <label class="u-label u-spacing-10 u-label-7" for="radiobutton-5">Absent</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="u-form-group u-form-input-layout-horizontal u-form-radiobutton u-label-left u-form-group-5">
-                    <label class="u-label u-spacing-10 u-label-8">Student C - 33333</label>
-                    <div class="u-form-radio-button-wrapper">
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-6" value="Present" checked="checked">
-                        <label class="u-label u-spacing-10 u-label-9" for="radiobutton-6">Present</label>
-                      </div>
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-6" value="Absent">
-                        <label class="u-label u-spacing-10 u-label-10" for="radiobutton-6">Absent</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="u-form-group u-form-input-layout-horizontal u-form-radiobutton u-label-left u-form-group-6">
-                    <label class="u-label u-spacing-10 u-label-11">Student D - 44444</label>
-                    <div class="u-form-radio-button-wrapper">
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-7" value="Present" required="required" checked="checked">
-                        <label class="u-label u-spacing-10 u-label-12" for="radiobutton-7">Present</label>
-                      </div>
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-7" value="Absent" required="required">
-                        <label class="u-label u-spacing-10 u-label-13" for="radiobutton-7">Absent</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="u-form-group u-form-input-layout-horizontal u-form-radiobutton u-label-left u-form-group-7">
-                    <label class="u-label u-spacing-10 u-label-14">Student E - 55555</label>
-                    <div class="u-form-radio-button-wrapper">
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-8" value="Present" required="required" checked="checked">
-                        <label class="u-label u-spacing-10 u-label-15" for="radiobutton-8">Present</label>
-                      </div>
-                      <div class="u-input-row">
-                        <input type="radio" name="radiobutton-8" value="Absent" required="required">
-                        <label class="u-label u-spacing-10 u-label-16" for="radiobutton-8">Absent</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="u-form-group u-form-submit u-label-left">
-                    <label class="u-label u-spacing-10 u-label-17"></label>
-                    <div class="u-align-left u-btn-submit-container">
-                      <a href="#" class="u-btn u-btn-round u-btn-submit u-button-style u-radius-50 u-btn-2">Submit<br>
-                      </a>
-                    </div>
-                    <input type="submit" value="submit" class="u-form-control-hidden" onclick="addAttendance()">
-                  </div>
-                  <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
+                  name="form" id="attendanceForm" style="padding: 7px;">
 
                 </form>
               </div>
@@ -296,26 +221,7 @@
                     </tr>
                   </thead>
                   <tbody class="u-table-body" id="studentList">
-                    <tr style="height: 75px;">
-                      <td class="u-border-1 u-border-grey-30 u-first-column u-grey-5 u-table-cell u-table-cell-39">Row 1
-                      </td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell">Description</td>
-                    </tr>
-                    <tr style="height: 76px;">
-                      <td class="u-border-1 u-border-grey-30 u-first-column u-grey-5 u-table-cell u-table-cell-41">Row 2
-                      </td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell">Description</td>
-                    </tr>
-                    <tr style="height: 76px;">
-                      <td class="u-border-1 u-border-grey-30 u-first-column u-grey-5 u-table-cell u-table-cell-43">Row 3
-                      </td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell">Description</td>
-                    </tr>
-                    <tr style="height: 76px;">
-                      <td class="u-border-1 u-border-grey-30 u-first-column u-grey-5 u-table-cell u-table-cell-45">Row 4
-                      </td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell">Description</td>
-                    </tr>
+
                   </tbody>
                 </table>
               </div>
