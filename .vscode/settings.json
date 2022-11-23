@@ -24,4 +24,5 @@
     "python.formatting.provider": "black",
     "python.linting.enabled": false,
     "terminal.integrated.defaultProfile.linux": "bash",
+    "python.languageServer": "Jedi",
 }
