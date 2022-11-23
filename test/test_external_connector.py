@@ -1,8 +1,18 @@
+"""
+Unit tests ExternalConnector
+
+Test status:
+* All functions tested
+* Repeated calls not tested
+* 
+"""
+
 from backend.external_connector import *
 import requests
 import git
 from unittest.mock import MagicMock, mock_open, patch
 from pathlib import Path
+from requests import Response
 import json
 
 SERVICE_JSON = """
@@ -55,9 +65,123 @@ mocked_open = mock_open(read_data=SERVICE_JSON)
 
 @patch("backend.external_connector.git.Repo.clone_from")
 @patch.object(Path, "open", mocked_open)
-def test_get_service_json(mocked_function):
-    actual = get_service_json()
+def test_get_service_json(clone_from_mock):
+    # Arrange
     EXPECTED = json.loads(SERVICE_JSON)
 
-    assert actual == EXPECTED
+    # Act
+    actual = ExternalConnector().get_service_json()
 
+    # Assert
+    assert actual == EXPECTED
+    clone_from_mock.assert_called_once()
+
+
+@patch.object(
+    ExternalConnector, "get_service_json", lambda *args: json.loads(SERVICE_JSON)
+)
+def test_ExternalConnector_fetch():
+    # Arrange
+    external_connector = ExternalConnector()
+
+    # Act
+    external_connector.fetch()
+
+    # Assert
+    assert external_connector.fetched == True
+    assert external_connector.services == ServiceContainer(**json.loads(SERVICE_JSON))
+
+
+def fetch_mock_fn(external_connector: ExternalConnector):
+    external_connector.fetched = True
+    external_connector.services = ServiceContainer(**json.loads(SERVICE_JSON))
+
+
+@patch(
+    "backend.external_connector.requests.get",
+    lambda url, timeout: type(
+        "Response",
+        (object,),
+        {"content": json.dumps(ExternalConnectorStub().getCalendar())},
+    ),  # Creates a mock response
+)
+def test_ExternalConnector_getCalendar():
+    with patch.object(ExternalConnector, "fetch") as fetch_mock:
+        # Arrange
+        external_connector = ExternalConnector()
+        fetch_mock.side_effect = lambda *args: fetch_mock_fn(external_connector)
+        EXPECTED = json.dumps(ExternalConnectorStub().getCalendar())
+
+        # Act
+        actual = external_connector.getCalendar()
+
+        # Assert
+        assert actual == EXPECTED
+        fetch_mock.assert_called_once()
+
+
+@patch(
+    "backend.external_connector.requests.get",
+    lambda url, timeout: type(
+        "Response",
+        (object,),
+        {"content": json.dumps(ExternalConnectorStub().getClasslist())},
+    ),  # Creates a mock response
+)
+def test_ExternalConnector_getClasslist():
+    with patch.object(ExternalConnector, "fetch") as fetch_mock:
+        # Arrange
+        external_connector = ExternalConnector()
+        fetch_mock.side_effect = lambda *args: fetch_mock_fn(external_connector)
+        EXPECTED = json.dumps(ExternalConnectorStub().getClasslist())
+
+        # Act
+        actual = external_connector.getClasslist()
+
+        # Assert
+        assert actual == EXPECTED
+        fetch_mock.assert_called_once()
+
+
+@patch(
+    "backend.external_connector.requests.get",
+    lambda url, timeout: type(
+        "Response",
+        (object,),
+        {"content": json.dumps(ExternalConnectorStub().getClasslist())},
+    ),  # Creates a mock response
+)
+def test_ExternalConnector_getCalendarTwice_FetchOnce():
+    with patch.object(ExternalConnector, "fetch") as fetch_mock:
+        # Arrange
+        external_connector = ExternalConnector()
+        fetch_mock.side_effect = lambda *args: fetch_mock_fn(external_connector)
+
+        # Act
+        external_connector.getCalendar()
+        external_connector.getCalendar()
+
+        # Assert
+        fetch_mock.assert_called_once()
+
+
+@patch(
+    "backend.external_connector.requests.get",
+    lambda url, timeout: type(
+        "Response",
+        (object,),
+        {"content": json.dumps(ExternalConnectorStub().getClasslist())},
+    ),  # Creates a mock response
+)
+def test_ExternalConnector_getClasslistTwice_FetchOnce():
+    with patch.object(ExternalConnector, "fetch") as fetch_mock:
+        # Arrange
+        external_connector = ExternalConnector()
+        fetch_mock.side_effect = lambda *args: fetch_mock_fn(external_connector)
+
+        # Act
+        external_connector.getClasslist()
+        external_connector.getClasslist()
+
+        # Assert
+        fetch_mock.assert_called_once()

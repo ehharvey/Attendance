@@ -1,10 +1,8 @@
 """Module that handles retrieving and serving IPs for other services"""
 from pydantic import BaseModel, validator
 from typing import Dict
-from typing import Dict
 import git
 import tempfile
-import shutil
 from pathlib import Path
 import json
 import requests
@@ -34,31 +32,27 @@ class ServiceContainer(BaseModel):
     adminactivities: Service
 
 
-def calculate_service_json_file(directory: Path, file: Path):
-    return directory / file
-
-
-def get_service_json(
-    URL=REPO_URL,
-    file=SERVICE_JSON_FILE,
-) -> Dict[str, dict]:
-    with tempfile.TemporaryDirectory() as t:
-        git.Repo.clone_from(URL, t, branch="main", depth=1)
-
-        result_file = t / file
-
-        with result_file.open(encoding="utf-8", mode="r") as f:
-            return json.load(f)
-
-
 class ExternalConnector:
-    def __init__(self, timeout=3, requests_getter=requests.get):
+    def __init__(self, timeout=3):
         self.timeout = timeout
         self.fetched = False
-        self.requests_getter = requests_getter
+        self.services = None
+
+    def get_service_json(
+        self,
+        URL=REPO_URL,
+        file=SERVICE_JSON_FILE,
+    ) -> Dict[str, dict]:
+        with tempfile.TemporaryDirectory() as t:
+            git.Repo.clone_from(URL, t, branch="main", depth=1)
+
+            result_file = t / file
+
+            with result_file.open(encoding="utf-8", mode="r") as f:
+                return json.load(f)
 
     def fetch(self):
-        repo_data = get_service_json()
+        repo_data = self.get_service_json()
         self.services: ServiceContainer = ServiceContainer(**repo_data)
         self.fetched = True
 
@@ -66,7 +60,7 @@ class ExternalConnector:
         if not self.fetched:
             self.fetch()
 
-        response = self.requests_getter(
+        response = requests.get(
             f"http://{self.services.calendar.ip}:{self.services.calendar.port}/event",
             timeout=self.timeout,
         )
@@ -77,7 +71,7 @@ class ExternalConnector:
         if not self.fetched:
             self.fetch()
 
-        response = self.requests_getter(
+        response = requests.get(
             f"http://{self.services.classlist.ip}:{self.services.classlist.port}/students",
             timeout=self.timeout,
         )
