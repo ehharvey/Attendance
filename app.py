@@ -78,7 +78,7 @@ def attendance(attendance_id):
     if request.method == "POST":
         request_json = request.get_json()
         attendance_object = Attendance(
-            id=request_json.get("id"), records=[request_json.get("records")]
+            id=request_json.get("id"), records=request_json.get("records")
         )
         try:
             DB.create_attendance(attendance_object)

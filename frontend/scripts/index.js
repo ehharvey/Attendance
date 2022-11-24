@@ -16,7 +16,6 @@ function getClasslist() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
-    alert(xmlHttp.responseText);
     return xmlHttp.responseText;
 }
 
@@ -26,7 +25,6 @@ function getCalendarEvent() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
     xmlHttp.send(null);
-    alert(xmlHttp.responseText);
     return xmlHttp.responseText;
 }
 
@@ -68,7 +66,6 @@ function addAttendance(attendance_json) {
 
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
-    alert(xmlHttp.responseText);
 }
 
 function fillAttendanceDropdown() {
@@ -238,7 +235,6 @@ function fillPastAttendance() {
     const selected = dropDown.value;
     const attendance = JSON.parse(getAttendance(selected));
     const table = document.getElementById("pastAttendanceTableBody");
-    console.log(table.children);
     for (let i = 0; i < table.childElementCount; i++) {//clear table
         table.children[i].remove();
     }
