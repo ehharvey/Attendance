@@ -71,7 +71,6 @@ function addAttendance(attendance_json) {
 function fillAttendanceDropdown() {
     const dropDown = document.getElementById("select-5c86");
     const attendance_json = JSON.parse(getSummary());
-    console.log(attendance_json);
     for (let i = 0; i < attendance_json.ids.length; i++) {
         const newOption = document.createElement("option");
         newOption.innerText = "Attendance " + attendance_json.ids[i];

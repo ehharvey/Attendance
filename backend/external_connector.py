@@ -144,7 +144,7 @@ class ExternalConnectorStub(ExternalConnector):
         date_string = today_value.strftime("%B %d")
         time = now.strftime("%H:%M:%S")
         return Event(
-            enterpriseID=date_string + " - " + time,
+            enterpriseID=date_string + " " + time,
             title="Test Event",
             startDate="2022-11-20T12:00:00",
             dueDate="2022-11-25T12:00:00",
