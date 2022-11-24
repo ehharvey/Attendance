@@ -6,6 +6,9 @@ import tempfile
 from pathlib import Path
 import json
 import requests
+from datetime import date
+from datetime import datetime
+
 
 REPO_URL = (
     "https://Ecoleshill@dev.azure.com/Ecoleshill/CSCN73030-F22/_git/CSCN73030-F22"
@@ -136,8 +139,12 @@ class ExternalConnectorStub(ExternalConnector):
         ]
 
     def getCalendar(self):
+        today_value = date.today()
+        now = datetime.now()
+        date_string = today_value.strftime("%B %d")
+        time = now.strftime("%H:%M:%S")
         return Event(
-            enterpriseID="abc",
+            enterpriseID=date_string + " - " + time,
             title="Test Event",
             startDate="2022-11-20T12:00:00",
             dueDate="2022-11-25T12:00:00",
