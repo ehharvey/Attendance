@@ -40,6 +40,16 @@ function getSummary() {
     return xmlHttp.responseText;
 }
 
+function getAttendance(attendanceID) {
+    //const Url = 'http://192.168.2.103:5000/api/attendance/'+ attendanceID;//swap IP for class
+    const Url = getRoute('/api/attendance/' + attendanceID);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", Url, false); // false for synchronous request
+    xmlHttp.send(null);
+    //alert(xmlHttp.responseText);
+    return xmlHttp.responseText;
+}
+
 function addAttendance(attendance_json) {
     logConsole("Sending Backend Attendance");
     /*const attendance_json = {   //placeholder attendance data
@@ -54,7 +64,7 @@ function addAttendance(attendance_json) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
-    logConsole(attendance_json); //log json object for debugging
+    console.log(attendance_json); //log json object for debugging
 
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
@@ -64,9 +74,11 @@ function addAttendance(attendance_json) {
 function fillAttendanceDropdown() {
     const dropDown = document.getElementById("select-5c86");
     const attendance_json = JSON.parse(getSummary());
+    console.log(attendance_json);
     for (let i = 0; i < attendance_json.ids.length; i++) {
         const newOption = document.createElement("option");
         newOption.innerText = "Attendance " + attendance_json.ids[i];
+        newOption.value = attendance_json.ids[i];
         dropDown.appendChild(newOption);
     }
 }
@@ -122,9 +134,9 @@ function fillNextAttendance() {
         presentRadio.value = "Present";
         presentRadio.required = "required";
         presentRadio.checked = "checked";
-        presentRadio.name = students[i].studentNumber
+        presentRadio.name = students[i].studentNumber;
         const presentLabel = document.createElement("label");
-        presentLabel.htmlFor = "radio" + i;
+        presentLabel.htmlFor = students[i].studentNumber;
         presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
         presentLabel.innerText = "Present";
 
@@ -206,7 +218,6 @@ function submitNextAttendance() {
         attendanceString += '{"studentID": ';
         let label = formOptions[i].lastChild.firstChild.firstChild.name;
         attendanceString += label; //replace leading non-digits with nothing
-        console.log(label)
         attendanceString += ', "isPresent": '
         if (formOptions[i].lastChild.firstChild.firstChild.checked) {
             attendanceString += 'true}';
@@ -222,8 +233,40 @@ function submitNextAttendance() {
 }
 
 function fillPastAttendance() {
-    logConsole("retrieve button pressed");
+    const dropDown = document.getElementById("select-5c86");
+    const selected = dropDown.value;
+    const attendance = getAttendance(selected);
+    const table = document.getElementById("pastAttendanceTableBody");
+    for (let i = 0; i < attendance.records.length; i++) {
+        const row = document.createElement("tr");
+        row.style = "height: 50px;";
 
+        const nameBox = document.createElement("td");
+        nameBox.classList.add("u-border-1", "u-border-black", "u-first-column", "u-grey-5", "u-table-cell", "u-table-cell-4");
+
+        nameBox.innerText = attendance.records[i].id;
+
+        const numberBox = document.createElement("td");
+        numberBox.classList.add("u-border-1", "u-border-grey-30", "u-table-cell");
+
+        numberBox.innerText = attendance.records[i].id;
+
+        const presentBox = document.createElement("td");
+        presentBox.classList.add("u-border-1", "u-border-grey-30", "u-table-cell");
+
+        if (attendance.records[i].isPresent) {
+            nameBox.innerText = "Present";
+        }
+        else {
+            nameBox.innerText = "Absent";
+        }
+
+        row.appendChild(nameBox);
+        row.appendChild(numberBox);
+        row.appendChild(presentBox);
+
+        table.appendChild(row);
+    }
 }
 
 
