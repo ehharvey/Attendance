@@ -134,9 +134,10 @@ function fillNextAttendance() {
         presentRadio.value = "Present";
         presentRadio.required = "required";
         presentRadio.checked = "checked";
-        presentRadio.name = students[i].studentNumber;
+        presentRadio.id = students[i].studentNumber;
+        presentRadio.name = "radio" + i;
         const presentLabel = document.createElement("label");
-        presentLabel.htmlFor = students[i].studentNumber;
+        presentLabel.htmlFor = "radio" + i;
         presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
         presentLabel.innerText = "Present";
 
@@ -216,8 +217,8 @@ function submitNextAttendance() {
             attendanceString += ', ';
         }
         attendanceString += '{"studentID": ';
-        let label = formOptions[i].lastChild.firstChild.firstChild.name;
-        attendanceString += label; //replace leading non-digits with nothing
+        let label = formOptions[i].lastChild.firstChild.firstChild.id;
+        attendanceString += label;
         attendanceString += ', "isPresent": '
         if (formOptions[i].lastChild.firstChild.firstChild.checked) {
             attendanceString += 'true}';
@@ -235,8 +236,13 @@ function submitNextAttendance() {
 function fillPastAttendance() {
     const dropDown = document.getElementById("select-5c86");
     const selected = dropDown.value;
-    const attendance = getAttendance(selected);
+    const attendance = JSON.parse(getAttendance(selected));
     const table = document.getElementById("pastAttendanceTableBody");
+    console.log(table.children);
+    for (let i = 0; i < table.childElementCount; i++) {//clear table
+        table.children[i].remove();
+    }
+
     for (let i = 0; i < attendance.records.length; i++) {
         const row = document.createElement("tr");
         row.style = "height: 50px;";
@@ -244,21 +250,21 @@ function fillPastAttendance() {
         const nameBox = document.createElement("td");
         nameBox.classList.add("u-border-1", "u-border-black", "u-first-column", "u-grey-5", "u-table-cell", "u-table-cell-4");
 
-        nameBox.innerText = attendance.records[i].id;
+        nameBox.innerText = attendance.records[i].studentID;
 
         const numberBox = document.createElement("td");
         numberBox.classList.add("u-border-1", "u-border-grey-30", "u-table-cell");
 
-        numberBox.innerText = attendance.records[i].id;
+        numberBox.innerText = attendance.records[i].studentID;
 
         const presentBox = document.createElement("td");
         presentBox.classList.add("u-border-1", "u-border-grey-30", "u-table-cell");
 
         if (attendance.records[i].isPresent) {
-            nameBox.innerText = "Present";
+            presentBox.innerText = "Present";
         }
         else {
-            nameBox.innerText = "Absent";
+            presentBox.innerText = "Absent";
         }
 
         row.appendChild(nameBox);
