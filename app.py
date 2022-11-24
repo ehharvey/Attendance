@@ -36,9 +36,19 @@ else:
 ##################################
 
 
-@app.route("/")
+@app.route("/test")
 def hello_world():
-    return send_file("./frontend/index.html")
+    return send_file("./frontend/test.html")
+
+
+@app.route("/")
+def teacher_view():
+    return send_file("./frontend/teacher-view.html")
+
+
+@app.route("/images/<path:path>")
+def send_image(path: Path):
+    return send_from_directory("./frontend/images", path)
 
 
 @app.route("/scripts/<path:path>")
@@ -65,11 +75,10 @@ def attendance(attendance_id):
     if request.method == "GET":
         val = DB.get_attendance(attendance_id)
         return val.json()
-
     if request.method == "POST":
         request_json = request.get_json()
         attendance_object = Attendance(
-            id=request_json.get("id"), records=[request_json.get("records")]
+            id=request_json.get("id"), records=request_json.get("records")
         )
         try:
             DB.create_attendance(attendance_object)
