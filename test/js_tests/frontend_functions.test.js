@@ -1,4 +1,4 @@
-const { logConsole, getRoute, addAttendance } = require('../../frontend/scripts/index');
+const { logConsole, getRoute, addAttendance } = require('../../Attendance/static/scripts/index');
 //global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 test('Tests function consoleLog - empty', () => {
