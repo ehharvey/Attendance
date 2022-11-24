@@ -1,18 +1,26 @@
-// ALL TESTS deleted since it breaks our website haha
+const { logConsole, getRoute, addAttendance } = require('../../frontend/scripts/index');
+//global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-// test('Tests function consoleLog - empty', () => {
-//     const d = Date();
-//     expect(logConsole()).toBe("[Page Load]" + " " + d);
-// });
+test('Tests function consoleLog - empty', () => {
+    const d = Date();
+    expect(logConsole()).toBe("[Page Load]" + " " + d);
+});
 
-// test('Tests function consoleLog - empty', () => {
-//     const d = Date();
-//     expect(logConsole("message123")).toBe("[message123] " + d);
-// });
+test('Tests function consoleLog - with message', () => {
+    const d = Date();
+    expect(logConsole("TestMessage 123")).toBe("[TestMessage 123] " + d);
+});
 
-// test('Tests function getNextEvent', () => {
-//     const Url = 'http://192.168.2.101:27501/nextevent';
-//     var XMLHttpRequest = require('xhr2');
-//     var xmlHttp = new XMLHttpRequest();
-//     expect(getCalendar()).toBe(xmlHttp);
-// });
+test('Tests getRoute Proxied', () => {
+    prepend = "/proxy/5000/";
+    route = "/api/attendance";
+    EXPECTED = "/proxy/5000/api/attendance"
+    expect(getRoute(route, prepend)).toBe(EXPECTED);
+});
+
+test('Tests getRoute Unproxied', () => {
+    prepend = "/";
+    route = "/api/attendance";
+    EXPECTED = "/api/attendance"
+    expect(getRoute(route, prepend)).toBe(EXPECTED);
+});
