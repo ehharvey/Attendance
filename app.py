@@ -60,7 +60,7 @@ def getSummaryAttendance():
     return {"ids": result}, 200  # tuple, return code
 
 
-@app.route("/api/attendance/<int:attendance_id>", methods=["GET", "POST"])
+@app.route("/api/attendance/<string:attendance_id>", methods=["GET", "POST"])
 def attendance(attendance_id):
     if request.method == "GET":
         val = DB.get_attendance(attendance_id)
@@ -73,9 +73,9 @@ def attendance(attendance_id):
         try:
             DB.create_attendance(attendance_object)
         except AttendanceAlreadyExists:
-            return "Attendance Item already exists"
+            return "Attendance Item already exists", 400
 
-        return "Successfully added attendance item"
+        return "Successfully added attendance item", 201
 
 
 @app.route("/api/classlist", methods=["GET"])
