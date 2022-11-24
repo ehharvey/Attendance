@@ -73,8 +73,7 @@ function fillAttendanceDropdown() {
 
 function fillStudentList() {
     const studentTable = document.getElementById("studentList");
-    //const students = JSON.parse(getClasslist());
-    const students = JSON.parse('[{"firstname": "Rachel", "lastname": "Le", "email": "RLe3474@conestogac.com", "studentNumber": 34744777 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso1657@conestogac.com", "studentNumber": 36641657 }, { "firstname": "Navdeep", "lastname": "Mangat", "email": "NMangat4464@conestogac.com", "studentNumber": 21334464 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso4673@conestogac.com", "studentNumber": 66504673 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso0266@conestogac.com", "studentNumber": 35400266 }, { "firstname": "Anthony1111", "lastname": "Sasso", "email": "ASasso4162@conestogac.com", "studentNumber": 67504162 }, { "firstname": "Eazaz", "lastname": "Jakda", "email": "EJakda3476@conestogac.com", "studentNumber": 72033476 }, { "firstname": "Navdeep", "lastname": "Mangat", "email": "NMangat5345@conestogac.com", "studentNumber": 1555345 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso6413@conestogac.com", "studentNumber": 37346413 }, { "firstname": "Anthony1111", "lastname": "Sasso", "email": "ASasso561@conestogac.com", "studentNumber": 1334561 }, { "firstname": "Ray", "lastname": "Reddington", "email": "RReddington4034@conestogac.on.ca", "studentNumber": 65274034}]');
+    const students = JSON.parse(getClasslist());
     for (let i = 0; i < students.length; i++) {
         const newRow = document.createElement("tr");
         newRow.style = "height: 21px;";
@@ -94,15 +93,14 @@ function fillStudentList() {
 }
 
 function fillNextAttendance() {
-    //const nextAttendance = JSON.parse(getCalendarEvent());
-    const nextAttendance = JSON.parse('[{"enterpriseID": 112233, "title": "Unit 2 Quiz", "startDate": "2022-11-24T08:00:00", "dueDate": "2022-11-24T22:00:00", "type": "quiz"}]');
-    //const students = JSON.parse(getClasslist());
-    const students = JSON.parse('[{"firstname": "Rachel", "lastname": "Le", "email": "RLe3474@conestogac.com", "studentNumber": 34744777 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso1657@conestogac.com", "studentNumber": 36641657 }, { "firstname": "Navdeep", "lastname": "Mangat", "email": "NMangat4464@conestogac.com", "studentNumber": 21334464 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso4673@conestogac.com", "studentNumber": 66504673 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso0266@conestogac.com", "studentNumber": 35400266 }, { "firstname": "Anthony1111", "lastname": "Sasso", "email": "ASasso4162@conestogac.com", "studentNumber": 67504162 }, { "firstname": "Eazaz", "lastname": "Jakda", "email": "EJakda3476@conestogac.com", "studentNumber": 72033476 }, { "firstname": "Navdeep", "lastname": "Mangat", "email": "NMangat5345@conestogac.com", "studentNumber": 1555345 }, { "firstname": "Anthony", "lastname": "Sasso", "email": "ASasso6413@conestogac.com", "studentNumber": 37346413 }, { "firstname": "Anthony1111", "lastname": "Sasso", "email": "ASasso561@conestogac.com", "studentNumber": 1334561 }, { "firstname": "Ray", "lastname": "Reddington", "email": "RReddington4034@conestogac.on.ca", "studentNumber": 65274034}]');
-
+    const nextAttendance = JSON.parse(getCalendarEvent());
+    const students = JSON.parse(getClasslist());
+    console.log(nextAttendance);
+    console.log(students);
     const title = document.getElementById("nextAttendanceTitle");
     const time = document.getElementById("nextAttendanceTime");
-    title.innerText = "Attendance for: " + nextAttendance[0].title;
-    time.innerText = "(ends " + nextAttendance[0].dueDate + ")";
+    title.innerText = "Attendance for: " + nextAttendance.title;
+    time.innerText = "(ends " + nextAttendance.dueDate + ")";
 
     const form = document.getElementById("attendanceForm");
 
