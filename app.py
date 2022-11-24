@@ -64,7 +64,8 @@ def getSummaryAttendance():
 def attendance(attendance_id):
     if request.method == "GET":
         val = DB.get_attendance(attendance_id)
-        return val
+        return val.json()
+
     if request.method == "POST":
         request_json = request.get_json()
         attendance_object = Attendance(
