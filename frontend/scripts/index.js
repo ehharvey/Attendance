@@ -40,15 +40,15 @@ function getSummary() {
     return xmlHttp.responseText;
 }
 
-function addAttendance(attendance_ID) {
+function addAttendance(attendance_json) {
     logConsole("Sending Backend Attendance");
-    const attendance_json = {   //placeholder attendance data
+    /*const attendance_json = {   //placeholder attendance data
         "id": attendance_ID,
         "records": {
             "studentID": "ABC",
             "isPresent": true
         }
-    }
+    } */
     //const Url = 'http://192.168.2.103:5000/api/attendance/' + attendance_json.id;
     const Url = getRoute('/api/attendance/' + attendance_json.id); //localhost ip, change for class
     var xmlHttp = new XMLHttpRequest();
@@ -95,8 +95,6 @@ function fillStudentList() {
 function fillNextAttendance() {
     const nextAttendance = JSON.parse(getCalendarEvent());
     const students = JSON.parse(getClasslist());
-    console.log(nextAttendance);
-    console.log(students);
     const title = document.getElementById("nextAttendanceTitle");
     const time = document.getElementById("nextAttendanceTime");
     title.innerText = "Attendance for: " + nextAttendance.title;
@@ -121,10 +119,10 @@ function fillNextAttendance() {
 
         const presentRadio = document.createElement("input");
         presentRadio.type = "radio";
-        presentRadio.value = "Absent";
+        presentRadio.value = "Present";
         presentRadio.required = "required";
         presentRadio.checked = "checked";
-        presentRadio.name = "radio" + i;
+        presentRadio.name = students[i].studentNumber
         const presentLabel = document.createElement("label");
         presentLabel.htmlFor = "radio" + i;
         presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
@@ -183,6 +181,7 @@ function fillNextAttendance() {
 
     const button = document.createElement("a");
     button.classList.add("u-btn", "u-btn-round", "u-btn-submit", "u-btn-style", "u-radius-50", "u-btn-2");
+    button.onclick = function () { submitNextAttendance(); };
     button.innerText = "Submit";
 
     buttonContainer.appendChild(button);
@@ -195,6 +194,39 @@ function fillNextAttendance() {
     //form.appendChild(buttonMessageSuccess); commented out because messages were not hidden
     //form.appendChild(buttonMessageFailure); as intended, will fix later if messages are needed
 }
+function submitNextAttendance() {
+    const nextAttendance = JSON.parse(getCalendarEvent());
+    let attendanceString = '{"id": "' + nextAttendance.enterpriseID + '", "records": [';
+    let formOptions = document.getElementsByClassName("u-form-radiobutton");
+    let numOptions = formOptions.length;
+    for (let i = 0; i < numOptions; i++) {
+        if (i > 0) {
+            attendanceString += ', ';
+        }
+        attendanceString += '{"studentID": ';
+        let label = formOptions[i].lastChild.firstChild.firstChild.name;
+        attendanceString += label; //replace leading non-digits with nothing
+        console.log(label)
+        attendanceString += ', "isPresent": '
+        if (formOptions[i].lastChild.firstChild.firstChild.checked) {
+            attendanceString += 'true}';
+        }
+        else {
+            attendanceString += 'false}';
+        }
+    }
+
+    attendanceString += ']}'
+    console.log(attendanceString);
+    addAttendance(JSON.parse(attendanceString));
+}
+
+function fillPastAttendance() {
+    logConsole("retrieve button pressed");
+
+}
+
+
 /*------------------------------------------------------------------------------------------
 * Function	        :	logConsole()
 * Description	    :	This Function is used to log request and responses to the console.			
