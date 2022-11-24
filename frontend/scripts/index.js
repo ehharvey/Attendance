@@ -44,7 +44,8 @@ function addAttendance(attendance_ID) {
         "id": attendance_ID,
         "records": {
             "studentID": "ABC",
-            "isPresent": true
+            "isPresent": true,
+            "startDate": "someDate"
         }
     }
     //const Url = 'http://192.168.2.103:5000/api/attendance/' + attendance_json.id;

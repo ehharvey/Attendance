@@ -6,8 +6,13 @@ from pydantic import BaseModel
 class StudentAttendanceItem(BaseModel):
     studentID: str  # Retrieved from classlist module
     isPresent: bool
+    startDate: str
 
 
 class Attendance(BaseModel):
     id: str  # Retrieve calendar
     records: List[StudentAttendanceItem]
+
+    # dateOfSave: str
+    # eventName: str
+    # typeOfEvent: str

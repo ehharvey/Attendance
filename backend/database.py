@@ -97,8 +97,11 @@ class Database:
             return attendance
 
     def get_summary_attendance(self) -> List[str]:
+        # looping the available json files to return the sumary items
         files = [
-            f.stem
+            # gettingt the attendance items
+            self.get_attendance(f.stem).id + str(self.get_attendance(f.stem).records)
+            # iterating
             for f in self.attendance_database_folder.glob("*.json")
             if f.is_file()
         ]
