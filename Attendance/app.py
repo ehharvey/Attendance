@@ -37,7 +37,7 @@ else:
 
 
 @app.route("/test")
-def hello_world():
+def test_view():
     return send_file("static/test.html")
 
 
@@ -62,7 +62,7 @@ def send_style(path: Path):
 
 
 @app.route("/api/attendance", methods=["GET"])
-def getSummaryAttendance():
+def get_summary_attendance():
     """Get Summary List of Attendances"""
 
     result = DB.get_summary_attendance()
@@ -71,7 +71,7 @@ def getSummaryAttendance():
 
 
 @app.route("/api/attendance/<string:attendance_id>", methods=["GET", "POST"])
-def attendance(attendance_id):
+def api_attendance(attendance_id):
     if request.method == "GET":
         val = DB.get_attendance(attendance_id)
         return val.json()
@@ -89,7 +89,7 @@ def attendance(attendance_id):
 
 
 @app.route("/api/classlist", methods=["GET"])
-def getClasslist():
+def get_classlist():
 
     try:
         response = app.config["services"].getClasslist()
@@ -101,7 +101,7 @@ def getClasslist():
 
 
 @app.route("/api/calendar", methods=["GET"])
-def getCalendar():
+def get_calendar():
 
     try:
         response = app.config["services"].getCalendar()
