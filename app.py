@@ -60,7 +60,7 @@ def getSummaryAttendance():
     return {"ids": result}, 200  # tuple, return code
 
 
-@app.route("/api/attendance/<int:attendance_id>", methods=["GET", "POST"])
+@app.route("/api/attendance/<string:attendance_id>", methods=["GET", "POST"])
 def attendance(attendance_id):
     if request.method == "GET":
         val = DB.get_attendance(attendance_id)

@@ -42,11 +42,11 @@ function addAttendance(attendance_ID) {
     logConsole("Sending Backend Attendance");
     const attendance_json = {   //placeholder attendance data
         "id": attendance_ID,
-        "records": {
+        "records": [{
             "studentID": "ABC",
             "isPresent": true,
             "startDate": "someDate"
-        }
+        }]
     }
     //const Url = 'http://192.168.2.103:5000/api/attendance/' + attendance_json.id;
     const Url = getRoute('/api/attendance/' + attendance_json.id); //localhost ip, change for class
@@ -54,7 +54,7 @@ function addAttendance(attendance_ID) {
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
     logConsole(attendance_json); //log json object for debugging
-
+    console.log(attendance_json);
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
     alert(xmlHttp.responseText);
