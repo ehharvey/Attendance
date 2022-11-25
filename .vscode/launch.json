@@ -22,6 +22,8 @@
                 "FLASK_DEBUG": "1",
             },
             "args": [
+                "--app",
+                "Attendance/app.py",
                 "run",
                 "--no-debugger",
                 "--no-reload",

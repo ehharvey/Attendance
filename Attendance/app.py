@@ -3,13 +3,13 @@ from typing import Dict
 from flask import Flask  # For web server
 from flask import request, send_from_directory, send_file
 from flask_cors import CORS, cross_origin
-from backend.database import Database
+from Attendance.database import Database
 import json
 
 from pydantic import BaseModel
-from backend.database import AttendanceAlreadyExists
-from backend.attendance import Attendance
-from backend.external_connector import ExternalConnector, ExternalConnectorStub
+from Attendance.database import AttendanceAlreadyExists
+from Attendance.attendance import Attendance
+from Attendance.external_connector import ExternalConnector, ExternalConnectorStub
 import requests
 import yaml
 
@@ -37,32 +37,32 @@ else:
 
 
 @app.route("/test")
-def hello_world():
-    return send_file("./frontend/test.html")
+def test_view():
+    return send_file("static/test.html")
 
 
 @app.route("/")
 def teacher_view():
-    return send_file("./frontend/teacher-view.html")
+    return send_file("static/teacher-view.html")
 
 
 @app.route("/images/<path:path>")
 def send_image(path: Path):
-    return send_from_directory("./frontend/images", path)
+    return send_from_directory("static/images", path)
 
 
 @app.route("/scripts/<path:path>")
 def send_script(path: Path):
-    return send_from_directory("./frontend/scripts", path)
+    return send_from_directory("static/scripts", path)
 
 
 @app.route("/style/<path:path>")
 def send_style(path: Path):
-    return send_from_directory("./frontend/style", path)
+    return send_from_directory("static/style", path)
 
 
 @app.route("/api/attendance", methods=["GET"])
-def getSummaryAttendance():
+def get_summary_attendance():
     """Get Summary List of Attendances"""
 
     result = DB.get_summary_attendance()
@@ -71,7 +71,7 @@ def getSummaryAttendance():
 
 
 @app.route("/api/attendance/<string:attendance_id>", methods=["GET", "POST"])
-def attendance(attendance_id):
+def api_attendance(attendance_id):
     if request.method == "GET":
         val = DB.get_attendance(attendance_id)
         return val.json()
@@ -89,7 +89,7 @@ def attendance(attendance_id):
 
 
 @app.route("/api/classlist", methods=["GET"])
-def getClasslist():
+def get_classlist():
 
     try:
         response = app.config["services"].getClasslist()
@@ -101,7 +101,7 @@ def getClasslist():
 
 
 @app.route("/api/calendar", methods=["GET"])
-def getCalendar():
+def get_calendar():
 
     try:
         response = app.config["services"].getCalendar()

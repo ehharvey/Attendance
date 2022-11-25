@@ -1,4 +1,29 @@
 @startuml
+class RestAPI {
+---
+test_view()
+teacher_view()
+send_image()
+send_script()
+send_style()
+get_summary_attendance()
+api_attendance()
+get_classlist()
+get_calendar()
+}
+
+class ExternalConnector {
+---
+getClasslist(): List[Student]
+getCalendar(): Event
+}
+
+class ExternalConnectorStub {
+---
+getClasslist(): List[Student]
+getCalendar(): Event
+}
+
 class Database {
 database_directory: Path
 ----
@@ -10,6 +35,20 @@ get_get_summary_attendance(): List[str]
 delete_attendance(id: str) # NOT IMPLEMENTED
 }
 
+struct Student {
+    firstname: str
+    lastname: str
+    email: str
+    studentNumber: int
+}
+
+class Event {
+    enterpriseID: str
+    title: str
+    startDate: str
+    dueDate: str
+    type: str
+}
 
 struct Attendance {
 id: str
@@ -21,6 +60,11 @@ studentID: str
 isPresent: bool
 }
 
+RestAPI *--- Database
+RestAPI *--- ExternalConnector
 Database   *---- Attendance
 Attendance *---- StudentAttendanceItem
+ExternalConnector <--- Event
+ExternalConnector <-- Student
+ExternalConnector <|-- ExternalConnectorStub
 @enduml

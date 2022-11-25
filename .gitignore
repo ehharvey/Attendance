@@ -14,3 +14,10 @@ node_modules/
 jest_reports/
 
 services.json
+
+# venvs
+.*venv
+
+# dist (created on builds)
+dist/
+build/
