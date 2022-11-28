@@ -30,5 +30,5 @@ smmap==5.0.0
 stevedore==4.1.1
 tomli==2.0.1
 typing_extensions==4.4.0
-urllib3==1.26.12
+urllib3==1.26.13
 Werkzeug==2.2.2
