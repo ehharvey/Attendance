@@ -8,9 +8,10 @@
   <meta name="description" content="">
   <title>Student View</title>
   <link rel="stylesheet" href="style/nicepage.css" media="screen">
-  <link rel="stylesheet" href="style/Student-View.css" media="screen">
+  <link rel="stylesheet" href="style/Teacher-View.css" media="screen">
   <script class="u-script" type="text/javascript" src="scripts/jquery.js" defer=""></script>
   <script class="u-script" type="text/javascript" src="scripts/nicepage.js" defer=""></script>
+  <script src="scripts/index.js"></script>
   <meta name="generator" content="Nicepage 4.21.12, nicepage.com">
   <link id="u-theme-google-font" rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
@@ -23,11 +24,12 @@
 		"logo": "images/2620267.png"
 }</script>
   <meta name="theme-color" content="#478ac9">
-  <meta property="og:title" content="Student View">
+  <meta property="og:title" content="Teacher View">
   <meta property="og:type" content="website">
 </head>
 
-<body class="u-body u-xl-mode" data-lang="en">
+<body class="u-body u-overlap u-xl-mode" data-lang="en"
+  onload="fillAttendanceDropdown(), fillStudentList(), fillNextAttendance()">
   <header class="u-clearfix u-header" id="sec-69df" data-animation-name="" data-animation-duration="0"
     data-animation-delay="0" data-animation-direction="">
     <div class="u-clearfix u-sheet u-sheet-1">
@@ -35,53 +37,13 @@
         <img src="images/2620267.png" class="u-logo-image u-logo-image-1">
       </a>
       <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
-        <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
-          <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base"
-            href="#">
-            <svg class="u-svg-link" viewBox="0 0 24 24">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#menu-hamburger"></use>
-            </svg>
-            <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px"
-              xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-              <g>
-                <rect y="1" width="16" height="2"></rect>
-                <rect y="7" width="16" height="2"></rect>
-                <rect y="13" width="16" height="2"></rect>
-              </g>
-            </svg>
-          </a>
-        </div>
-        <div class="u-custom-menu u-nav-container">
-          <ul class="u-nav u-unstyled u-nav-1">
-            <li class="u-nav-item"><a
-                class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base"
-                href="Teacher-View.html" style="padding: 10px 20px;">Teacher View</a>
-            </li>
-            <li class="u-nav-item"><a
-                class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base"
-                href="Student-View.html" style="padding: 10px 20px;">Student View</a>
-            </li>
-          </ul>
-        </div>
-        <div class="u-custom-menu u-nav-container-collapse">
-          <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-            <div class="u-inner-container-layout u-sidenav-overflow">
-              <div class="u-menu-close"></div>
-              <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2">
-                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="Teacher-View.html">Teacher View</a>
-                </li>
-                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="Student-View.html">Student View</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-        </div>
+
+
       </nav>
       <h1 class="u-text u-text-default u-text-1">Attendance Module</h1>
     </div>
   </header>
-  <section class="u-clearfix u-section-1" id="sec-346b">
+  <section class="u-align-center u-clearfix u-section-1" id="sec-e145">
     <div class="u-clearfix u-sheet u-sheet-1">
       <div class="u-expanded-width u-tab-links-align-left u-tabs u-tabs-1">
         <ul class="u-border-2 u-border-palette-1-base u-spacing-10 u-tab-list u-unstyled" role="tablist">
@@ -93,7 +55,8 @@
           </li>
           <li class="u-tab-item" role="presentation">
             <a class="u-active-palette-1-base u-button-style u-grey-10 u-tab-link u-text-active-white u-text-black u-tab-link-2"
-              id="link-tab-2917" href="#tab-2917" role="tab" aria-controls="tab-2917" aria-selected="false">FAQ</a>
+              id="link-tab-be89" href="#tab-be89" role="tab" aria-controls="tab-be89" aria-selected="false">Next
+              Attendance</a>
           </li>
         </ul>
         <div class="u-tab-content">
@@ -109,9 +72,6 @@
                     <div class="u-form-select-wrapper">
                       <select id="select-5c86" name="select"
                         class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
-                        <option value="Past Attendance A">Past Attendance A</option>
-                        <option value="Past Attendance B">Past Attendance B</option>
-                        <option value="Past Attendance C">Past Attendance C</option>
                       </select>
                       <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px"
@@ -121,14 +81,11 @@
                     </div>
                   </div>
                   <div class="u-align-right u-form-group u-form-submit u-label-top">
-                    <input type="submit" value="submit" class="u-form-control-hidden">
+                    <input type="submit" onclick="fillPastAttendance()" value="submit" class="u-form-control-hidden">
                     <a href="#" class="u-btn u-btn-submit u-button-style">Retrieve Attendance</a>
                   </div>
-                  <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
-                  <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors
-                    then try again. </div>
-                  <input type="hidden" value="" name="recaptchaResponse">
-                  <input type="hidden" name="formServices" value="934cbc90fe3eef69b4c82dcfb3d37952">
+
+
                 </form>
               </div>
               <div class="u-expanded-width u-table u-table-responsive u-table-1">
@@ -145,58 +102,32 @@
                       <th class="u-border-1 u-border-palette-4-base u-table-cell">Present or Absent</th>
                     </tr>
                   </thead>
-                  <tbody class="u-table-body">
-                    <tr style="height: 75px;">
-                      <td class="u-border-1 u-border-black u-first-column u-grey-5 u-table-cell u-table-cell-4"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                    </tr>
-                    <tr style="height: 75px;">
-                      <td class="u-border-1 u-border-black u-grey-5 u-table-cell u-table-cell-7"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                    </tr>
-                    <tr style="height: 75px;">
-                      <td class="u-border-1 u-border-black u-grey-5 u-table-cell u-table-cell-10"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                    </tr>
-                    <tr style="height: 75px;">
-                      <td class="u-border-1 u-border-black u-grey-5 u-table-cell u-table-cell-13"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                    </tr>
-                    <tr style="height: 75px;">
-                      <td class="u-border-1 u-border-black u-grey-5 u-table-cell u-table-cell-16"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                    </tr>
-                    <tr style="height: 75px;">
-                      <td class="u-border-1 u-border-black u-grey-5 u-table-cell u-table-cell-19"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                      <td class="u-border-1 u-border-grey-30 u-table-cell"></td>
-                    </tr>
+                  <tbody class="u-table-body" id="pastAttendanceTableBody">
+
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
-          <div class="u-container-style u-tab-pane u-white u-tab-pane-2" id="tab-2917" role="tabpanel"
-            aria-labelledby="link-tab-2917">
-            <div class="u-container-layout u-valign-top u-container-layout-2">
-              <div class="fr-view u-clearfix u-rich-text u-text u-text-1">
-                <h1>
-                  <span style="font-weight: 700;">FAQ</span>
-                </h1>
-                <h2>
-                  <span style="font-weight: 700;">How to use this module:</span>
-                </h2>
-                <p>
-                  <span style="font-weight: 700;">Write this part later</span>
-                </p>
+          <div class="u-container-style u-tab-pane u-white u-tab-pane-2" id="tab-be89" role="tabpanel"
+            aria-labelledby="link-tab-be89">
+            <div class="u-container-layout u-container-layout-2">
+              <h2 class="u-text u-text-default u-text-1" id="nextAttendanceTitle">Attendance
+                for: {next_calendar_event}</h2>
+              <h3 class="u-text u-text-default u-text-1" id="nextAttendanceTime"> time ending
+              </h3>
+              <h6 class="u-text u-text-default u-text-2">Student Name - Student Number</h6>
+              <h6 class="u-text u-text-default u-text-3">Present or Absent</h6>
+              <div class="u-align-center u-form u-form-2">
+                <form action="" class="u-clearfix u-form-spacing-17 u-form-vertical u-inner-form" source="email"
+                  name="form" id="attendanceForm" style="padding: 7px;">
+
+                </form>
               </div>
             </div>
           </div>
+
+
         </div>
       </div>
     </div>
@@ -208,6 +139,7 @@
       <p class="u-small-text u-text u-text-variant u-text-1">Sample text. Click to select the Text Element.</p>
     </div>
   </footer>
+
 
 </body>
 
