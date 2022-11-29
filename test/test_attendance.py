@@ -1,4 +1,4 @@
-from backend.attendance import Attendance, StudentAttendanceItem
+from Attendance.attendance import Attendance, StudentAttendanceItem
 import json
 
 

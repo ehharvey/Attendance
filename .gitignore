@@ -17,3 +17,10 @@ services.json
 
 # Coverage files
 .coverage
+
+# venvs
+.*venv
+
+# dist (created on builds)
+dist/
+build/

@@ -7,7 +7,7 @@ Test status:
 * 
 """
 
-from backend.external_connector import *
+from Attendance.external_connector import *
 import requests
 import git
 from unittest.mock import MagicMock, mock_open, patch
@@ -63,7 +63,7 @@ SERVICE_JSON = """
 mocked_open = mock_open(read_data=SERVICE_JSON)
 
 
-@patch("backend.external_connector.git.Repo.clone_from")
+@patch("Attendance.external_connector.git.Repo.clone_from")
 @patch.object(Path, "open", mocked_open)
 def test_get_service_json(clone_from_mock):
     # Arrange
@@ -98,7 +98,7 @@ def fetch_mock_fn(external_connector: ExternalConnector):
 
 
 @patch(
-    "backend.external_connector.requests.get",
+    "Attendance.external_connector.requests.get",
     lambda url, timeout: type(
         "Response",
         (object,),
@@ -121,7 +121,7 @@ def test_ExternalConnector_getCalendar():
 
 
 @patch(
-    "backend.external_connector.requests.get",
+    "Attendance.external_connector.requests.get",
     lambda url, timeout: type(
         "Response",
         (object,),
@@ -144,7 +144,7 @@ def test_ExternalConnector_getClasslist():
 
 
 @patch(
-    "backend.external_connector.requests.get",
+    "Attendance.external_connector.requests.get",
     lambda url, timeout: type(
         "Response",
         (object,),
@@ -166,7 +166,7 @@ def test_ExternalConnector_getCalendarTwice_FetchOnce():
 
 
 @patch(
-    "backend.external_connector.requests.get",
+    "Attendance.external_connector.requests.get",
     lambda url, timeout: type(
         "Response",
         (object,),

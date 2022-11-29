@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from backend.database import Database
+from Attendance.database import Database
 from unittest.mock import MagicMock, mock_open, patch
 
 
