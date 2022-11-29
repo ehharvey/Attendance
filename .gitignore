@@ -18,6 +18,7 @@ services.json
 # venvs
 .*venv
 
-# dist (created on builds)
+# Build-related things
 dist/
 build/
+*.egg-info

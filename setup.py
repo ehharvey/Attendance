@@ -29,7 +29,7 @@ setup(
     # There are some restrictions on what makes a valid project name
     # specification here:
     # https://packaging.python.org/specifications/core-metadata/#name
-    name="Attendance Module",  # Required
+    name="CSCN73030 Attendance Module",  # Required
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
     #
@@ -127,7 +127,6 @@ setup(
     extras_require={"test": ["coverage", "pytest"]},
     # If there are data files included in your packages that need to be
     # installed, specify them here.
-    package_dir={"": "Attendance"},
     include_package_data=True,
     # Although 'package_data' is the preferred approach, in some case you may
     # need to place data files outside of your packages. See:

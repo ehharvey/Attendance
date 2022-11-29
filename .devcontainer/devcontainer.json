@@ -15,7 +15,12 @@
 		}
 	},
 	"features": {
-		"github-cli": "latest"
+		"github-cli": "latest",
+		"docker-in-docker": {
+			"version": "latest",
+			"moby": true,
+			"dockerDashComposeVersion": "v2"
+		}
 	},
 	// Configure tool-specific properties.
 	"customizations": {
