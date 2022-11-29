@@ -234,9 +234,7 @@ function fillPastAttendance() {
     const selected = dropDown.value;
     const attendance = JSON.parse(getAttendance(selected));
     const table = document.getElementById("pastAttendanceTableBody");
-    for (let i = 0; i < table.childElementCount; i++) {//clear table
-        table.children[i].remove();
-    }
+    table.innerHTML = '';
 
     for (let i = 0; i < attendance.records.length; i++) {
         const row = document.createElement("tr");
