@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from Attendance.database import Database
 from unittest.mock import MagicMock, mock_open, patch
+import json
 
 
 # Mock for Attendance
@@ -14,7 +15,56 @@ class AttendanceMock:
         return self._payload
 
 
+attendance_mock_json = """
+{
+    "id": "abc",
+    "records": []
+}
+"""
+
+m_open = mock_open(read_data=attendance_mock_json)
 ########################
+
+@patch.object(Path, "is_file")
+@patch.object(Path, "open", m_open)
+@patch.object(Path, "mkdir", lambda *args: None)
+def test_database_update_attendance(is_file_mock):
+
+    #Arrange 
+    db = Database()
+    attendance_mock = AttendanceMock()
+    EXPECTED = AttendanceMock()
+
+
+    #Act 
+    db.update_attendance(attendance_mock)
+    
+
+    #Assert 
+    m_open.assert_called_once()
+    is_file_mock.assert_called_once()
+
+
+
+
+@patch.object(Path, "is_file")
+@patch.object(Path, "open", m_open)
+@patch.object(Path, "mkdir", lambda *args: None)
+def test_database_get_attendance(is_file_mock):
+
+    # Arrange
+    db = Database()
+    EXPECTED = attendance_mock_json
+
+    # Act
+    actual = db.get_attendance("5")
+
+    # Assert 
+    assert actual == json.loads(EXPECTED)
+    assert m_open.call_count == 2
+    is_file_mock.assert_called_once()
+    
+
 
 
 def test_database_init():
