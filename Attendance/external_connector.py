@@ -81,6 +81,15 @@ class ExternalConnector:
 
         return response.content
 
+    def getModeOfOperation(self):
+        if not self.fetched:
+            self.fetch()
+
+        response = requests.get(
+            f"http://{self.services.adminactivities.ip}:{self.services.adminactivities.port}/modeofoperation",
+            timeout=self.timeout,
+        )
+
 
 class Student(BaseModel):
     firstname: str
@@ -95,6 +104,10 @@ class Event(BaseModel):
     startDate: str
     dueDate: str
     type: str
+
+
+class modeOfOp(BaseModel):
+    modeofoperation: bool
 
 
 class ExternalConnectorStub(ExternalConnector):
@@ -150,3 +163,6 @@ class ExternalConnectorStub(ExternalConnector):
             dueDate="2022-11-25T12:00:00",
             type="Test",
         ).dict()
+
+    def getModeOfOperation(self):
+        return modeOfOp(modeofoperation=False).dict()
