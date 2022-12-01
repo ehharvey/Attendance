@@ -106,7 +106,7 @@ class Event(BaseModel):
     type: str
 
 
-class modeOfOp(BaseModel):
+class ModeOfOperation(BaseModel):
     modeofoperation: bool
 
 
@@ -165,4 +165,4 @@ class ExternalConnectorStub(ExternalConnector):
         ).dict()
 
     def getModeOfOperation(self):
-        return modeOfOp(modeofoperation=False).dict()
+        return ModeOfOperation(modeofoperation=False).dict()
