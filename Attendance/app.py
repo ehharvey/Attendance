@@ -45,7 +45,6 @@ def test_view():
 def teacher_view():
     response = app.config["services"].getModeOfOperation()
     value = response["modeofoperation"]
-    print(response["modeofoperation"])
     if value == True:
         return send_file("static/teacher-view.html")
     else:
