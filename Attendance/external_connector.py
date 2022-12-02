@@ -143,10 +143,49 @@ class ExternalConnectorStub(ExternalConnector):
         now = datetime.now()
         date_string = today_value.strftime("%B %d")
         time = now.strftime("%H:%M:%S")
-        return Event(
-            enterpriseID=date_string + " " + time,
-            title="Test Event",
-            startDate="2022-11-20T12:00:00",
-            dueDate="2022-11-25T12:00:00",
-            type="Test",
-        ).dict()
+        print(date_string)
+        return [
+            Event(
+                enterpriseID=today_value.strftime("%B %d") + " " + time,
+                title="Test Event",
+                startDate="2022-11-20T12:00:00",
+                dueDate="2022-11-25T12:00:00",
+                type="Test",
+            ).dict(),
+            Event(
+                enterpriseID=today_value.replace(month=12, day=7).strftime("%B %d")
+                + " "
+                + time,
+                title="Test Event",
+                startDate="2022-12-7T12:00:00",
+                dueDate="2022-12-7T12:00:00",
+                type="Test",
+            ).dict(),
+            Event(
+                enterpriseID=today_value.replace(month=12, day=14).strftime("%B %d")
+                + " "
+                + time,
+                title="Test Event",
+                startDate="2022-12-14T12:00:00",
+                dueDate="2022-12-14T12:00:00",
+                type="Test",
+            ).dict(),
+            Event(
+                enterpriseID=today_value.replace(month=12, day=21).strftime("%B %d")
+                + " "
+                + time,
+                title="Test Event",
+                startDate="2022-12-21T12:00:00",
+                dueDate="2022-12-21T12:00:00",
+                type="Test",
+            ).dict(),
+            Event(
+                enterpriseID=today_value.replace(month=12, day=28).strftime("%B %d")
+                + " "
+                + time,
+                title="Test Event",
+                startDate="2022-12-28T12:00:00",
+                dueDate="2022-12-28T12:00:00",
+                type="Test",
+            ).dict(),
+        ]
