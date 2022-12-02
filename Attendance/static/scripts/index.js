@@ -70,11 +70,24 @@ function addAttendance(attendance_json) {
 
 function fillAttendanceDropdown() {
     const dropDown = document.getElementById("select-5c86");
-    const attendance_json = JSON.parse(getSummary());
-    for (let i = 0; i < attendance_json.ids.length; i++) {
+    const pastAttendance_string = getSummary();
+    const pastAttendance_json = JSON.parse(pastAttendance_string);
+    localStorage.setItem('attendances', pastAttendance_string);
+
+    for (let i = 0; i < pastAttendance_json.ids.length; i++) {
         const newOption = document.createElement("option");
-        newOption.innerText = "Attendance " + attendance_json.ids[i];
-        newOption.value = attendance_json.ids[i];
+        let label = "Attendance " + pastAttendance_json.ids[i];
+        let l = (80 - label.length) % 6;
+        newOption.innerHTML = label.padEnd(122 - l, "&emsp;") + " (Completed)";
+
+        newOption.value = pastAttendance_json.ids[i];
+        dropDown.appendChild(newOption);
+    }
+    const futureAttendance_json = JSON.parse(getCalendarEvent());
+    for (let i = 0; i < futureAttendance_json.length; i++) {
+        const newOption = document.createElement("option");
+        newOption.innerText = "Attendance " + futureAttendance_json[i].enterpriseID;
+        newOption.value = futureAttendance_json[i].enterpriseID;
         dropDown.appendChild(newOption);
     }
 }
@@ -88,9 +101,12 @@ function fillNextAttendance() {
     time.innerText = "(ends " + nextAttendance.dueDate + ")";
 
     const form = document.getElementById("attendanceForm");
-
+    const table = document.createElement("table");
+    //form.appendChild(table);
     for (let i = 0; i < students.length; i++) {
         //input + label -> inputRows -> wrapper + label -> formGroups ->form
+        const table_row = document.createElement("tr");
+        table_row.style = "height: 50px;";
         const row = document.createElement("div");
         row.classList.add("u-form-group", "u-form-input-layout-horizontal", "u-form-radiobutton", "u-label-left", "u-form-group-4");
 
@@ -183,6 +199,10 @@ function fillNextAttendance() {
     //form.appendChild(buttonMessageFailure); as intended, will fix later if messages are needed
 }
 function submitNextAttendance() {
+    const dropDown = document.getElementById("select-5c86");
+    const selected = dropDown.value;
+    console.log(selected);
+
     const nextAttendance = JSON.parse(getCalendarEvent());
     let attendanceString = '{"id": "' + nextAttendance.enterpriseID + '", "records": [';
     let formOptions = document.getElementsByClassName("u-form-radiobutton");
@@ -211,40 +231,107 @@ function submitNextAttendance() {
 function fillPastAttendance() {
     const dropDown = document.getElementById("select-5c86");
     const selected = dropDown.value;
+    console.log(selected);
+
+    const students = JSON.parse(getClasslist());
+    console.log(localStorage.getItem('attendances'));
+
     const attendance = JSON.parse(getAttendance(selected));
-    const table = document.getElementById("pastAttendanceTableBody");
-    table.innerHTML = '';
-
+    console.log(attendance);
+    const page = document.getElementById("page-base");
+    const form = document.getElementById("form-students");
+    form.innerHTML = "";
+    console.log(form);
     for (let i = 0; i < attendance.records.length; i++) {
-        const row = document.createElement("tr");
-        row.style = "height: 50px;";
+        const name_label = document.createElement("p");
+        name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
+        name_label.innerText = "Some Name";
 
-        const nameBox = document.createElement("td");
-        nameBox.classList.add("u-border-1", "u-border-black", "u-first-column", "u-grey-5", "u-table-cell", "u-table-cell-4");
+        const number_label = document.createElement("p");
+        number_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-2");
+        number_label.innerText = "Some number";
 
-        nameBox.innerText = attendance.records[i].studentID;
+        const form_group = document.createElement("div");
+        form_group.classList.add("u-form-group", "u-form-input-layout-horizontal", "u-form-partition-factor-3", "u-form-radiobutton", "u-form-group-5");
 
-        const numberBox = document.createElement("td");
-        numberBox.classList.add("u-border-1", "u-border-grey-30", "u-table-cell");
+        const hidden_label = document.createElement("label");
+        hidden_label.classList.add("u-form-control-hidden", "u-label");
 
-        numberBox.innerText = attendance.records[i].studentID;
+        const buttonWrapper = document.createElement("div");
+        buttonWrapper.classList.add("u-form-radio-button-wrapper");
 
-        const presentBox = document.createElement("td");
-        presentBox.classList.add("u-border-1", "u-border-grey-30", "u-table-cell");
+        const rowPresent = document.createElement("div");
+        rowPresent.classList.add("u-input-row");
 
-        if (attendance.records[i].isPresent) {
-            presentBox.innerText = "Present";
-        }
-        else {
-            presentBox.innerText = "Absent";
-        }
+        const presentRadio = document.createElement("input");
+        presentRadio.type = "radio";
+        presentRadio.value = "Present";
+        presentRadio.required = "required";
+        presentRadio.checked = "checked";
+        presentRadio.id = students[i].studentNumber;
+        presentRadio.name = "radio" + i;
+        const presentLabel = document.createElement("label");
+        presentLabel.htmlFor = "radio" + i;
+        presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+        presentLabel.innerText = "Present";
 
-        row.appendChild(nameBox);
-        row.appendChild(numberBox);
-        row.appendChild(presentBox);
+        const rowAbsent = document.createElement("div");
+        rowAbsent.classList.add("u-input-row");
 
-        table.appendChild(row);
+        const absentRadio = document.createElement("input");
+        absentRadio.type = "radio";
+        absentRadio.value = "Absent";
+        absentRadio.required = "required";
+        absentRadio.name = "radio" + i;
+        const absentLabel = document.createElement("label");
+        absentLabel.htmlFor = "radio" + i;
+        absentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+        absentLabel.innerText = "Absent";
+
+
+        rowPresent.appendChild(presentRadio);
+        rowPresent.appendChild(presentLabel);
+
+        rowAbsent.appendChild(absentRadio);
+        rowAbsent.appendChild(absentLabel);
+
+        buttonWrapper.appendChild(rowPresent);
+        buttonWrapper.appendChild(rowAbsent);
+
+        form_group.appendChild(hidden_label);
+        form_group.appendChild(buttonWrapper);
+
+        form.appendChild(name_label);
+        form.appendChild(number_label);
+        form.appendChild(form_group);
     }
+    const buttonRow = document.createElement("div");
+    buttonRow.classList.add("u-form-group", "u-form-submit", "u-label-left");
+
+    const buttonSpacer = document.createElement("label");
+    buttonSpacer.classList.add("u-label", "u-spacing-10", "u-label-17");
+
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("u-align-left", "u-btn-submit-container");
+
+    const buttonInput = document.createElement("input");
+    buttonInput.type = "submit";
+    buttonInput.value = "submit";
+    buttonInput.classList.add("u-form-control-hidden");
+
+    const button = document.createElement("a");
+    button.classList.add("u-btn", "u-btn-round", "u-btn-submit", "u-btn-style", "u-radius-50", "u-btn-2");
+    button.onclick = function () { submitNextAttendance(); };
+    button.innerText = "Submit";
+
+    buttonContainer.appendChild(button);
+    buttonContainer.appendChild(buttonInput);
+
+    buttonRow.appendChild(buttonSpacer);
+    buttonRow.appendChild(buttonContainer);
+
+    form.appendChild(buttonRow);
+    page.appendChild(form);
 }
 
 
