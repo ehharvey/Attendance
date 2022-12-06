@@ -202,3 +202,6 @@ class ExternalConnectorStub(ExternalConnector):
                 type="Test",
             ).dict(),
         ]
+
+    def getModeOfOperation(self):
+        return ModeOfOperation(modeofoperation=True).dict()
