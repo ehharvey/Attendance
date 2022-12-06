@@ -1,0 +1,3 @@
+name = "cscn73030-adminprof-mocker"
+main = "src/index.ts"
+compatibility_date = "2022-11-29"

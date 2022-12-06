@@ -29,7 +29,7 @@
 </head>
 
 <body class="u-body u-overlap u-xl-mode" data-lang="en"
-  onload="fillAttendanceDropdown(), fillStudentList(), fillNextAttendance()">
+  onload="getSummary(), getCalendarEvent(), getClasslist(),fillAttendanceDropdown()">
   <header class="u-clearfix u-header" id="sec-69df" data-animation-name="" data-animation-duration="0"
     data-animation-delay="0" data-animation-direction="">
     <div class="u-clearfix u-sheet u-sheet-1">
@@ -62,7 +62,7 @@
         <div class="u-tab-content">
           <div class="u-container-style u-tab-active u-tab-pane u-white u-tab-pane-1" id="tab-799c" role="tabpanel"
             aria-labelledby="link-tab-799c">
-            <div class="u-container-layout u-valign-top u-container-layout-1">
+            <div class="u-container-layout u-valign-top u-container-layout-1" id="page-base">
               <div class="u-form u-form-1">
                 <form action="https://forms.nicepagesrv.com/Form/Process"
                   class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form-1"
@@ -89,7 +89,7 @@
                 </form>
               </div>
               <div class="u-expanded-width u-table u-table-responsive u-table-1">
-                <table class="u-table-entity">
+                <table class="u-table-entity" , name="blue-table">
                   <colgroup>
                     <col width="33.3%">
                     <col width="33.3%">
@@ -103,9 +103,19 @@
                     </tr>
                   </thead>
                   <tbody class="u-table-body" id="pastAttendanceTableBody">
-
+                    <tr style="height: 44px;">
+                      <td class="u-first-column u-table-cell"></td>
+                      <td class="u-table-cell"></td>
+                      <td class="u-table-cell"></td>
+                    </tr>
                   </tbody>
+
                 </table>
+                <div class="u-form u-form-2">
+                  <form class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" id="form-students"
+                    style="padding: 0px;">
+                  </form>
+                </div>
               </div>
             </div>
           </div>
