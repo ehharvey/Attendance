@@ -165,4 +165,4 @@ class ExternalConnectorStub(ExternalConnector):
         ).dict()
 
     def getModeOfOperation(self):
-        return ModeOfOperation(modeofoperation=False).dict()
+        return ModeOfOperation(modeofoperation=True).dict()
