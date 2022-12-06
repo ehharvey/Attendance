@@ -85,6 +85,7 @@ def api_attendance(attendance_id):
     if request.method == "GET":
         val = DB.get_attendance(attendance_id)
         return val.json()
+
     if request.method == "POST":
         request_json = request.get_json()
         attendance_object = Attendance(
@@ -96,15 +97,23 @@ def api_attendance(attendance_id):
             return "Attendance Item already exists", 400
 
         return "Successfully added attendance item", 201
+
     if request.method == "PUT":
         request_json = request.get_json()
         attendance_object = Attendance(
             id=request_json.get("id"), records=request_json.get("records")
         )
+
         try:
             DB.update_attendance(attendance_object)
+            return "ok", 201
+
         except AttendanceDoesNotExist:
-            return "Attenance Item does not exist", 404
+            try:
+                DB.create_attendance(attendance_object)
+                return "ok", 201
+            except AttendanceAlreadyExists:
+                return "Internal Server Error", 500  # We should never reach here
 
 
 @app.route("/api/classlist", methods=["GET"])
