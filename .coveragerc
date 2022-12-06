@@ -1,0 +1,3 @@
+[run]
+source = Attendance
+omit = Attendance/app.py

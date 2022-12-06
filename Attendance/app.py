@@ -1,18 +1,17 @@
+import json
+import os.path
 from pathlib import Path
 from typing import Dict
-from flask import Flask  # For web server
-from flask import request, send_from_directory, send_file
-from flask_cors import CORS, cross_origin
-from Attendance.database import Database
-import json
-
-from pydantic import BaseModel
-from Attendance.database import AttendanceAlreadyExists
-from Attendance.attendance import Attendance
-from Attendance.external_connector import ExternalConnector, ExternalConnectorStub
 import requests
 import yaml
+from flask import Flask  # For web server
+from flask import request, send_file, send_from_directory
+from flask_cors import CORS, cross_origin
+from pydantic import BaseModel
 
+from Attendance.attendance import Attendance
+from Attendance.database import AttendanceAlreadyExists, Database
+from Attendance.external_connector import ExternalConnector, ExternalConnectorStub
 
 # APP Initialization ################
 app = Flask(__name__)
@@ -33,32 +32,39 @@ if not app.config.get("debug", False):
     app.config["services"]: ExternalConnector = ExternalConnector()
 else:
     app.config["services"]: ExternalConnector = ExternalConnectorStub()
+
+STATIC_DIRECTORY = Path(os.path.dirname(__file__)) / "static"
 ##################################
 
 
 @app.route("/test")
 def test_view():
-    return send_file("static/test.html")
+    return send_file(STATIC_DIRECTORY / "test.html")
 
 
 @app.route("/")
 def teacher_view():
-    return send_file("static/teacher-view.html")
+    response = app.config["services"].getModeOfOperation()
+    value = response["modeofoperation"]
+    if value == True:
+        return send_file(STATIC_DIRECTORY / "teacher-view.html")
+    else:
+        return send_file(STATIC_DIRECTORY / "student-view.html")
 
 
 @app.route("/images/<path:path>")
 def send_image(path: Path):
-    return send_from_directory("static/images", path)
+    return send_from_directory(STATIC_DIRECTORY / "images", path)
 
 
 @app.route("/scripts/<path:path>")
 def send_script(path: Path):
-    return send_from_directory("static/scripts", path)
+    return send_from_directory(STATIC_DIRECTORY / "scripts", path)
 
 
 @app.route("/style/<path:path>")
 def send_style(path: Path):
-    return send_from_directory("static/style", path)
+    return send_from_directory(STATIC_DIRECTORY / "style", path)
 
 
 @app.route("/api/attendance", methods=["GET"])

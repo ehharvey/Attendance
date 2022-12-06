@@ -15,9 +15,13 @@ jest_reports/
 
 services.json
 
+# Coverage files
+.coverage
+
 # venvs
 .*venv
 
-# dist (created on builds)
+# Build-related things
 dist/
 build/
+*.egg-info
