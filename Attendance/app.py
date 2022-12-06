@@ -44,7 +44,12 @@ def test_view():
 
 @app.route("/")
 def teacher_view():
-    return send_file(STATIC_DIRECTORY / "teacher-view.html")
+    response = app.config["services"].getModeOfOperation()
+    value = response["modeofoperation"]
+    if value == True:
+        return send_file(STATIC_DIRECTORY / "teacher-view.html")
+    else:
+        return send_file(STATIC_DIRECTORY / "student-view.html")
 
 
 @app.route("/images/<path:path>")

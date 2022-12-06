@@ -15,6 +15,9 @@ jest_reports/
 
 services.json
 
+# Coverage files
+.coverage
+
 # venvs
 .*venv
 

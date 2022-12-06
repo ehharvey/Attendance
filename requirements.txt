@@ -13,7 +13,7 @@ docutils==0.19
 exceptiongroup==1.0.4
 Flask==2.2.2
 Flask-Cors==3.0.10
-gitdb==4.0.9
+gitdb==4.0.10
 GitPython==3.1.29
 idna==3.4
 importlib-metadata==5.1.0
@@ -53,7 +53,7 @@ stevedore==4.1.1
 tomli==2.0.1
 twine==4.0.1
 typing_extensions==4.4.0
-urllib3==1.26.12
 webencodings==0.5.1
+urllib3==1.26.13
 Werkzeug==2.2.2
 zipp==3.11.0

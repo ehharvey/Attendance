@@ -79,27 +79,6 @@ function fillAttendanceDropdown() {
     }
 }
 
-function fillStudentList() {
-    const studentTable = document.getElementById("studentList");
-    const students = JSON.parse(getClasslist());
-    for (let i = 0; i < students.length; i++) {
-        const newRow = document.createElement("tr");
-        newRow.style = "height: 21px;";
-
-        const newNameCell = document.createElement("td");
-        newNameCell.classList.add("u-border-1", "u-border-grey-30", "u-first-column", "u-grey-5", "u-table-cell", "u-table-cell-39");
-        newNameCell.innerText = students[i].firstname + " " + students[i].lastname;
-
-        const newNumberCell = document.createElement("td");
-        newNumberCell.classList.add("u-border-1", "u-border-grey-30", "u-table-cell");
-        newNumberCell.innerText = students[i].studentNumber;
-
-        newRow.appendChild(newNameCell);
-        newRow.appendChild(newNumberCell);
-        studentTable.appendChild(newRow);
-    }
-}
-
 function fillNextAttendance() {
     const nextAttendance = JSON.parse(getCalendarEvent());
     const students = JSON.parse(getClasslist());
@@ -234,9 +213,7 @@ function fillPastAttendance() {
     const selected = dropDown.value;
     const attendance = JSON.parse(getAttendance(selected));
     const table = document.getElementById("pastAttendanceTableBody");
-    for (let i = 0; i < table.childElementCount; i++) {//clear table
-        table.children[i].remove();
-    }
+    table.innerHTML = '';
 
     for (let i = 0; i < attendance.records.length; i++) {
         const row = document.createElement("tr");
