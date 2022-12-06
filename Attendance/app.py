@@ -116,3 +116,8 @@ def get_calendar():
 
     except Exception as e:
         return str(e), 500
+
+
+@app.route("/favicon.ico")
+def get_favicon():
+    return send_file("static/images/favicon.ico")
