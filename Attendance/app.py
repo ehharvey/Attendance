@@ -7,7 +7,7 @@ from Attendance.database import Database
 import json
 
 from pydantic import BaseModel
-from Attendance.database import AttendanceAlreadyExists
+from Attendance.database import AttendanceAlreadyExists, AttendanceDoesNotExist
 from Attendance.attendance import Attendance
 from Attendance.external_connector import ExternalConnector, ExternalConnectorStub
 import requests
@@ -75,7 +75,7 @@ def get_summary_attendance():
     return {"ids": result}, 200  # tuple, return code
 
 
-@app.route("/api/attendance/<string:attendance_id>", methods=["GET", "POST"])
+@app.route("/api/attendance/<string:attendance_id>", methods=["GET", "PUT", "POST"])
 def api_attendance(attendance_id):
     if request.method == "GET":
         val = DB.get_attendance(attendance_id)
@@ -91,6 +91,15 @@ def api_attendance(attendance_id):
             return "Attendance Item already exists", 400
 
         return "Successfully added attendance item", 201
+    if request.method == "PUT":
+        request_json = request.get_json()
+        attendance_object = Attendance(
+            id=request_json.get("id"), records=request_json.get("records")
+        )
+        try:
+            DB.update_attendance(attendance_object)
+        except AttendanceDoesNotExist:
+            return "Attenance Item does not exist", 404
 
 
 @app.route("/api/classlist", methods=["GET"])
