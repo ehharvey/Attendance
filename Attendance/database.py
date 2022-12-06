@@ -38,7 +38,7 @@ class Database:
         if not self.attendance_database_folder.is_dir():
             self.attendance_database_folder.mkdir()
 
-    def create_attendance(self, attendance: Attendance):
+    def create_attendance(self, attendance: Attendance) -> None:
         """
         Creates a new attendance item. Raises AttendanceAlreadyExists if the item already exists
 

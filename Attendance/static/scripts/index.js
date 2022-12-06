@@ -62,6 +62,18 @@ function addAttendance(attendance_json) {
     xmlHttp.send(JSON.stringify(attendance_json));
 }
 
+function updateAttendance(attendance_json) {
+    logConsole("Sending Backend Attendance");
+    const Url = getRoute('/api/attendance/' + attendance_json.id); //localhost ip, change for class
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("PUT", Url, false); // false for synchronous request
+
+    console.log(attendance_json); //log json object for debugging
+
+    xmlHttp.setRequestHeader("Content-Type", "application/json");
+    xmlHttp.send(JSON.stringify(attendance_json));
+}
+
 function fillAttendanceDropdown() {
     const dropDown = document.getElementById("select-5c86");
     const pastAttendance_string = localStorage.getItem('pastAttendances');
@@ -333,5 +345,5 @@ function logConsole(loggingValue) {
 }
 
 module.exports = {
-    logConsole, addAttendance, getRoute,
+    logConsole, addAttendance, updateAttendance, getRoute
 };
