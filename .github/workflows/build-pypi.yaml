@@ -52,5 +52,4 @@ jobs:
       with:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/cscn73030-attendance-module:${{ steps.bump.output.new_tag }}
-        build-args:
-          version: ${{ steps.bump.output.new_tag }}
+        build-args: version=${{ steps.bump.output.new_tag }}
