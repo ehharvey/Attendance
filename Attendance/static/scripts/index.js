@@ -11,7 +11,6 @@ function getRoute(route, route_prepend = window.location.pathname) {
 }
 
 function getClasslist() {
-    logConsole("Getting Class List");
     const Url = getRoute('api/classlist');
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
@@ -89,7 +88,7 @@ function fillAttendanceDropdown() {
         newOption.value = pastAttendance_json.ids[i];
         dropDown.appendChild(newOption);
     }
-    const futureAttendance_json = JSON.parse(getCalendarEvent());
+    const futureAttendance_json = JSON.parse(localStorage.getItem("calendar"));
     for (let i = 0; i < futureAttendance_json.length; i++) {
         const newOption = document.createElement("option");
         newOption.innerText = "Attendance " + futureAttendance_json[i].enterpriseID;
@@ -105,12 +104,17 @@ function editOldAttendance() {
 function submitNewAttendance() {
     const dropDown = document.getElementById("select-5c86");
     const selected = dropDown.value;
+    console.log(selected);
+    const futureEvents = JSON.parse(localStorage.getItem("calendar"));
 
-    const pastAttendances = localStorage.getItem('pastAttendances')
-    const completedAttendance = pastAttendances.includes(selected)
+    for (let i = 0; i < futureEvents.length; i++) {
+        if (futureEvents[i].enterpriseID === selected) {
+            var selectedEvent = futureEvents[i];
+        }
+    }
 
-    const nextAttendance = JSON.parse(getCalendarEvent());
-    let attendanceString = '{"id": "' + nextAttendance.enterpriseID + '", "records": [';
+
+    let attendanceString = '{"id": "' + selectedEvent.enterpriseID + '", "records": [';
     let formOptions = document.getElementsByClassName("u-form-radiobutton");
     let numOptions = formOptions.length;
     for (let i = 0; i < numOptions; i++) {
@@ -143,18 +147,32 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
     const selected = dropDown.value;
 
     const students = JSON.parse(localStorage.getItem('classlist'));
-
     const pastAttendances = localStorage.getItem('attendances');
 
     const completedAttendance = pastAttendances.includes(selected)
 
     if (completedAttendance) {
         const attendance = JSON.parse(getAttendance(selected));
-
+        const classlist = JSON.parse(localStorage.getItem("classlist"));
         for (let i = 0; i < attendance.records.length; i++) {
             const name_label = document.createElement("p");
             name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
-            name_label.innerText = attendance.records[i].studentID;
+
+            for (let j = 0; j < classlist.length; j++) {    //match studentID against studentNumbers from classlist to find name
+                if (String(classlist[j].studentNumber) === attendance.records[i].studentID) {
+                    var studentName = classlist[j].firstname + " " + classlist[j].lastname;
+
+                    classlist.splice(j, 1);//remove classlist student so it doesnt get matched again
+
+                    break;
+                }
+
+            }
+            if (typeof studentName === 'undefined') { //reuse student number if no name could be found/matched
+                studentName = attendance.records[i].studentID;
+            }
+
+            name_label.innerText = studentName;
 
             const number_label = document.createElement("p");
             number_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-2");
