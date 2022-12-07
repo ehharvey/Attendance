@@ -4,7 +4,7 @@ RUN apt-get update
 RUN apt-get install -y python3.10 python3-pip git
 RUN apt-get clean
 
-RUN pip3.10 install Attendance-Module waitress
+RUN pip3.10 install CSCN73030-Attendance-Module:$version waitress
 
 COPY --chown=root:root dockerfile-entrypoint.sh /entrypoint.sh
 
