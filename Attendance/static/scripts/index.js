@@ -55,8 +55,6 @@ function addAttendance(attendance_json) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
-    console.log(attendance_json); //log json object for debugging
-
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
 }
@@ -71,15 +69,18 @@ function updateAttendance(attendance_json) {
 
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
+    console.log("response:");
+    console.log(xmlHttp.responseText);
 }
 
 function fillAttendanceDropdown() {
     const dropDown = document.getElementById("select-5c86");
+    dropDown.innerText = '';
     const pastAttendance_string = localStorage.getItem('pastAttendances');
     const pastAttendance_json = JSON.parse(pastAttendance_string);
-    localStorage.setItem('attendances', pastAttendance_string);
+    localStorage.setItem('current_attendance', pastAttendance_string);
 
-    for (let i = 0; i < pastAttendance_json.ids.length; i++) {
+    for (let i = 0; i < pastAttendance_json.ids.length; i++) {//completed attendances
         const newOption = document.createElement("option");
         let label = "Attendance " + pastAttendance_json.ids[i];
         let l = (80 - label.length) % 6;
@@ -89,7 +90,7 @@ function fillAttendanceDropdown() {
         dropDown.appendChild(newOption);
     }
     const futureAttendance_json = JSON.parse(localStorage.getItem("calendar"));
-    for (let i = 0; i < futureAttendance_json.length; i++) {
+    for (let i = 0; i < futureAttendance_json.length; i++) { //future attendances
         const newOption = document.createElement("option");
         newOption.innerText = "Attendance " + futureAttendance_json[i].enterpriseID;
         newOption.value = futureAttendance_json[i].enterpriseID;
@@ -97,14 +98,40 @@ function fillAttendanceDropdown() {
     }
 }
 
-function editOldAttendance() {
-    console.log("editing old attendances");
-}
-
-function submitNewAttendance() {
+function editOldAttendance() { //triggered by re-submit button
     const dropDown = document.getElementById("select-5c86");
     const selected = dropDown.value;
-    console.log(selected);
+
+    let attendanceString = '{"id": "' + selected + '", "records": [';
+    let formOptions = document.getElementsByClassName("u-form-radiobutton");
+    let numOptions = formOptions.length;
+    for (let i = 0; i < numOptions; i++) {
+        console.log(formOptions[i]);
+        if (i > 0) {
+            attendanceString += ', ';
+        }
+        attendanceString += '{"studentID": "';
+        let label = formOptions[i].lastChild.firstChild.firstChild.id;
+        attendanceString += label;
+        attendanceString += '", "isPresent": '
+        if (formOptions[i].lastChild.firstChild.firstChild.checked) {
+            attendanceString += 'true}';
+        }
+        else {
+            attendanceString += 'false}';
+        }
+    }
+    attendanceString += ']}'
+
+    console.log(attendanceString);
+    updateAttendance(JSON.parse(attendanceString));
+    getSummary();   //force update of past attendances in local storage
+
+}
+
+function submitNewAttendance() {//triggered by submit button
+    const dropDown = document.getElementById("select-5c86");
+    const selected = dropDown.value;
     const futureEvents = JSON.parse(localStorage.getItem("calendar"));
 
     for (let i = 0; i < futureEvents.length; i++) {
@@ -122,8 +149,8 @@ function submitNewAttendance() {
             attendanceString += ', ';
         }
         attendanceString += '{"studentID": ';
-        let label = formOptions[i].lastChild.firstChild.firstChild.id;
-        attendanceString += label;
+        let label = formOptions[i].lastChild.firstChild.firstChild.id; //gets id of radio buttons
+        attendanceString += label;                                      //which is set to studentNumber of student it reps.
         attendanceString += ', "isPresent": '
         if (formOptions[i].lastChild.firstChild.firstChild.checked) {
             attendanceString += 'true}';
@@ -134,7 +161,6 @@ function submitNewAttendance() {
     }
 
     attendanceString += ']}'
-    console.log(attendanceString);
     addAttendance(JSON.parse(attendanceString));
 }
 
@@ -147,7 +173,7 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
     const selected = dropDown.value;
 
     const students = JSON.parse(localStorage.getItem('classlist'));
-    const pastAttendances = localStorage.getItem('attendances');
+    const pastAttendances = localStorage.getItem('current_attendance');
 
     const completedAttendance = pastAttendances.includes(selected)
 
@@ -197,7 +223,7 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
                 if (attendance.records[i].isPresent)
                     presentRadio.checked = "checked";
             }
-            presentRadio.id = students[i].studentNumber;
+            presentRadio.id = attendance.records[i].studentID;
             presentRadio.name = "radio" + i;
             const presentLabel = document.createElement("label");
             presentLabel.htmlFor = "radio" + i;
@@ -241,7 +267,7 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
             var buttonFunction = function () { editOldAttendance(); };
         }
     }
-    else {
+    else { //non-completed attendance
         for (let i = 0; i < students.length; i++) {
             const name_label = document.createElement("p");
             name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
@@ -310,8 +336,6 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
         }
     }
 
-
-
     const buttonRow = document.createElement("div");
     buttonRow.classList.add("u-form-group", "u-form-submit", "u-label-left");
 
@@ -328,8 +352,8 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
 
     const button = document.createElement("a");
     button.classList.add("u-btn", "u-btn-round", "u-btn-submit", "u-btn-style", "u-radius-50", "u-btn-2");
-    button.onclick = buttonFunction;
-    button.innerText = buttonText;
+    button.onclick = buttonFunction;//button function and text dependant on 
+    button.innerText = buttonText;//completed attendance or new attendance
 
     buttonContainer.appendChild(button);
     buttonContainer.appendChild(buttonInput);
