@@ -172,3 +172,8 @@ def get_calendar():
 @app.route("/favicon.ico")
 def get_favicon():
     return send_file("static/images/favicon.ico")
+
+
+@app.route("/healthcheck")
+def get_health():
+    return "ok", 200
