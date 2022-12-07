@@ -293,7 +293,7 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
             presentRadio.type = "radio";
             presentRadio.value = "Present";
             presentRadio.required = "required";
-            presentRadio.checked = "checked";
+            //presentRadio.checked = "checked";
             presentRadio.id = students[i].studentNumber;
             presentRadio.name = "radio" + i;
             const presentLabel = document.createElement("label");
