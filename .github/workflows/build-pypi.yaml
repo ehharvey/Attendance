@@ -32,6 +32,9 @@ jobs:
     
     - name: Build application
       run: python -m build
+      with:
+        env:
+          VERSION: ${{ steps.bump.outputs.new_tag }}
     
     - name: Publish a Python distribution to PyPI
       uses: pypa/gh-action-pypi-publish@37f50c210e3d2f9450da2cd423303d6a14a6e29f # 1.5.1
