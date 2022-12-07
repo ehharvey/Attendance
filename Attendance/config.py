@@ -12,8 +12,8 @@ class Config(BaseModel):
     S3_KEY_SECRET: Optional[str]
     S3_BUCKET: Optional[str]
 
-    SERVICE_REPO: Union[AnyHttpUrl, str]
     SERVICE_FILE: Optional[Path]
+    SERVICE_REPO: Union[AnyHttpUrl, str]
 
     @validator("S3_BUCKET", always=True)
     def validate_s3(cls, value, values: dict):
@@ -23,15 +23,19 @@ class Config(BaseModel):
 
         return value
 
-    @validator("SERVICE_REPO")
-    def validate_service_repo(cls, value):
-        if isinstance(value, str):
+    @validator("SERVICE_REPO", always=True)
+    def validate_service_repo(cls, value, values: dict):
+        if isinstance(value, AnyHttpUrl):
+            pass
+        elif isinstance(value, str):
             assert value == "DEBUG", "SERVICE_REPO must be a URL or 'DEBUG'"
 
-        return value
-
-    @validator("SERVICE_FILE")
-    def validate_service_file(cls, value, values: dict):
-        assert "SERVICE_REPO" in values, "SERVICE_REPO must be set if SERVICE_FILE is"
-
+        if value != "DEBUG":
+            assert values[
+                "SERVICE_FILE"
+            ], "SERVICE_FILE must be set if SERVICE_REPO is not 'DEBUG'"
+        else:
+            assert not values[
+                "SERVICE_FILE"
+            ], "SERVICE_FILE must not be set if SERVICE_REPO is 'DEBUG'"
         return value

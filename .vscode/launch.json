@@ -33,6 +33,48 @@
             ],
             "jinja": true,
             "justMyCode": true
+        },
+        {
+            "name": "Web Server (Admin Stubs)",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "Attendance/app.py",
+                "FLASK_DEBUG": "1",
+                "SERVICE_REPO": "https://github.com/CSCN73030-projectv-group9/ServiceJsonProf",
+                "SERVICE_FILE": "serviceips.json"
+            },
+            "args": [
+                "run",
+                "--no-debugger",
+                "--no-reload",
+                "--port",
+                "5000"
+            ],
+            "jinja": true,
+            "justMyCode": true
+        },
+        {
+            "name": "Web Server (Student Stubs)",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "Attendance/app.py",
+                "FLASK_DEBUG": "1",
+                "SERVICE_REPO": "https://github.com/CSCN73030-projectv-group9/ServiceJsonStudent",
+                "SERVICE_FILE": "serviceips.json"
+            },
+            "args": [
+                "run",
+                "--no-debugger",
+                "--no-reload",
+                "--port",
+                "5000"
+            ],
+            "jinja": true,
+            "justMyCode": true
         }
     ]
 }
