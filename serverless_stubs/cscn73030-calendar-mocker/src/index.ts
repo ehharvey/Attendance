@@ -1,4 +1,5 @@
 import { Router } from '@tsndr/cloudflare-worker-router'
+import { CALENDAR_EVENTS } from './event_data'
 
 export interface Env {
 	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
@@ -11,54 +12,25 @@ export interface Env {
 	// MY_BUCKET: R2Bucket
 }
 
+
+/* 
+This code stubs the Calendar service.
+
+NOT IMPLEMENTED: GET /events?startRange=[datetime]&endRange=[datetime]
+
+There is minimal testing on posting and deletion
+*/
+
 // Helpers
 const TAG_CHOICES: Array<string> = ["quiz", "survey", "assignment"]
 
-// Returns a number between 0 and `max` (default=100)
-function getRandomNumber(max: number = 100): number {
-	return Math.floor(Math.random() * max)
-}
-
-function getPaddedNumberString(max: number = 59, padding: number = 2): string {
-	let value = getRandomNumber(max).toString()
-
-	return value.padStart(padding, "000")
-}
-
-function getRandomDate() {
-	let year: string = "2022"
-	let month: string = "11"
-	let day: string = getPaddedNumberString(30)
-	let hour: string = getPaddedNumberString(23)
-	let minute: string = getPaddedNumberString(59)
-	let second: string = getPaddedNumberString(59)
-
-
-	return `${year}-${month}-${day}T${hour}:${minute}:${second}`
-}
-
-function getRandomTag() {
-
-	let my_choice: number = getRandomNumber(2)
-
-	return TAG_CHOICES[my_choice]
-}
-
 
 class RandomEvent {
-	eID: string
-	title: string
-	startDate: string
-	endDate: string
-	tag: string
-
-	constructor() {
-		this.eID = "c " + getRandomNumber();
-		this.title = "Event Title " + getRandomNumber()
-		this.startDate = getRandomDate()
-		this.endDate = getRandomDate()
-		this.tag = getRandomTag()
-	}
+	eID: string = "ERROR"
+	title: string = "ERROR"
+	startDate: string = "ERROR"
+	endDate: string = "ERROR"
+	tag: string = "ERROR"
 }
 
 // Initialize router
@@ -76,44 +48,12 @@ router.use(({ req, res, next }) => {
 // Gets
 router.get('/event', ({ req, res }) => {
 	// Generate amount of objects
-	if ("amount" in req.query) {
-		let req_amt = parseInt(req.query["amount"])
-		console.log("Requested " + req_amt.toString() + " events")
-
-		if (isNaN(req_amt)) {
-			res.status = 400
-			res.body = "Please specify a numeric amount"
-		}
-		else {
-			res.body = new Array(req_amt).fill("").map((_, i) => new RandomEvent)
-		}
-
-
-	}
-	else if ("eventType" in req.query) {
-		let req_tag = req.query["eventType"]
-		console.log("Requested event of type: " + req_tag)
-
-		if (TAG_CHOICES.includes(req_tag)) {
-			let result = new RandomEvent
-
-			while (!(TAG_CHOICES.includes(result.tag))) {
-				result = new RandomEvent
-			}
-
-			res.body = result
-		}
-		else {
-			res.body = "Invalid type, pick one of " + TAG_CHOICES.toString()
-			res.status = 404
-		}
-	}
-	else if ("enterpriseID" in req.query) {
-		res.body = new RandomEvent
+	if ("enterpriseID" in req.query) {
+		res.body = { "eID": "c 27", "title": "Event Title 16", "startDate": "2022-11-04T15:05:23", "endDate": "2022-11-18T15:23:21", "tag": "quiz" }
 		res.body.eID = req.query["enterpriseID"]
 	}
 	else {
-		res.body = new RandomEvent
+		res.body = { "eID": "c 24", "title": "Event Title 71", "startDate": "2022-11-22T15:21:14", "endDate": "2022-11-14T20:37:32", "tag": "survey" }
 	}
 })
 
@@ -130,6 +70,38 @@ router.put("/event", ({ req, res }) => {
 	else {
 		res.status = 400
 		res.body = "Require enterpriseID query string"
+	}
+})
+
+router.get("/events", ({ req, res }) => {
+	if ("eventType" in req.query) {
+		let req_tag = req.query["eventType"]
+		console.log("Requested event of type: " + req_tag)
+
+		if (TAG_CHOICES.includes(req_tag)) {
+			let result = CALENDAR_EVENTS.filter(({ tag }) => tag == req_tag)
+			res.body = result
+		}
+		else {
+			res.body = "Invalid type, pick one of " + TAG_CHOICES.toString()
+			res.status = 404
+		}
+
+	} else if ("amount" in req.query) {
+
+		let req_amt = parseInt(req.query["amount"])
+		console.log("Requested " + req_amt.toString() + " events")
+
+		if (isNaN(req_amt)) {
+			res.status = 400
+			res.body = "Please specify a numeric amount"
+		}
+		else {
+			res.body = CALENDAR_EVENTS.slice(0, req_amt)
+		}
+
+	} else {
+		res.body = CALENDAR_EVENTS
 	}
 })
 
