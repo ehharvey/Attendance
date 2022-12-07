@@ -1,5 +1,5 @@
 import { Router } from '@tsndr/cloudflare-worker-router'
-import { uniqueNamesGenerator, Config, colors, animals } from 'unique-names-generator';
+import { CLASSLIST } from './data';
 
 
 export interface Env {
@@ -15,24 +15,12 @@ export interface Env {
 
 // Helpers
 
-// Returns a number between 0 and `max` (default=100)
-function getRandomNumber(max: number = 100): number {
-	return Math.floor(Math.random() * max)
-}
-
 
 class Student {
-	firstname: string
-	lastname: string
-	email: string
-	studentNumber: number
-
-	constructor() {
-		this.firstname = uniqueNamesGenerator({ dictionaries: [colors] })
-		this.lastname = uniqueNamesGenerator({ dictionaries: [animals] })
-		this.email = this.firstname + "." + this.lastname + getRandomNumber() + "@example.com"
-		this.studentNumber = getRandomNumber(20000000)
-	}
+	firstname: string = "ERROR"
+	lastname: string = "ERROR"
+	email: string = "ERROR"
+	studentNumber: number = -1
 }
 
 
@@ -51,27 +39,37 @@ router.use(({ req, res, next }) => {
 
 // Return random number of students
 router.get('/students', ({ req, res }) => {
-	let return_number = getRandomNumber()
-
-	res.body = new Array(return_number).fill("").map((_, i) => new Student)
+	res.body = CLASSLIST
 })
 
 // TODO: Figure out what the exact format of this is
 router.get("/students/classSize", ({ req, res }) => {
-	res.body = getRandomNumber()
+	res.body = CLASSLIST.length
 })
 
 router.get("/students/:id", ({ req, res }) => {
-	const student_id = parseInt(req.params.id)
+	let search_id = parseInt(req.params.id)
 
-	if (isNaN(student_id)) {
+	if (isNaN(search_id)) {
 		res.status = 400
 		res.body = "Please enter a numerical ID"
 	}
 	else {
-		let result = new Student
-		result.studentNumber = student_id
-		res.body = result
+		console.log("Looking for ID ", search_id)
+
+		let filtered = CLASSLIST.filter(
+			student => student.studentNumber == search_id
+		)
+
+		console.log("Found: ", filtered)
+
+		if (filtered.length == 1) {
+			res.body = filtered[0]
+			res.status = 200
+		} else {
+			res.body = "NOT FOUND"
+			res.status = 404
+		}
 	}
 })
 

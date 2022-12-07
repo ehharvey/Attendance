@@ -1,5 +1,6 @@
 import json
 import os.path
+import os
 from pathlib import Path
 from typing import Dict
 import requests
@@ -10,11 +11,13 @@ from flask_cors import CORS, cross_origin
 from pydantic import BaseModel
 
 from Attendance.attendance import Attendance
+from Attendance.config import Config
 from Attendance.database import (
     AttendanceAlreadyExists,
     Database,
     AttendanceDoesNotExist,
 )
+from Attendance.database_s3 import DatabaseS3
 from Attendance.external_connector import ExternalConnector, ExternalConnectorStub
 
 # APP Initialization ################
@@ -22,20 +25,46 @@ app = Flask(__name__)
 cors = CORS(app)
 CORS(app)
 
-CONFIG_FILE = Path("attendance_config.yaml")
+# This app is configured by environmental variables:
+#
+# S3 configuration
+# S3_REGION: Location of S3 bucket
+# S3_URL: URL of S3 Bucket
+# S3_KEY_ID: Key ID to access S3 Bucket
+# S3_KEY_SECRET: Secret for Key ID
+# S3_BUCKET: Bucket name to use for storage. If does not exist, will create
+#
+# If no S3 environmental variables are set, resorts to file-based DB
+# If only some S3 environmental variables are set, raises an error
+#
+# External Service Config
+# SERVICE_REPO: link to repo containing json file
+# SERVICE_FILE: name of json file
+#
+# If not all SERVICE environmental variables are set, raises an error
+CONFIG = Config(**os.environ)
+DB: Database
+CONNECTOR: ExternalConnector
 
-if CONFIG_FILE.is_file():
-    with CONFIG_FILE.open(mode="r", encoding="utf-8") as f:
-        app.config.update(**yaml.safe_load(f))
+if CONFIG.SERVICE_REPO != "DEBUG":
+    CONNECTOR: ExternalConnector = ExternalConnector(
+        CONFIG.SERVICE_REPO, CONFIG.SERVICE_FILE
+    )
 else:
-    app.config.update(**{"debug": False})
+    CONNECTOR: ExternalConnector = ExternalConnectorStub()
 
-DB = Database()
 
-if not app.config.get("debug", False):
-    app.config["services"]: ExternalConnector = ExternalConnector()
+if CONFIG.S3_REGION:
+    DB = DatabaseS3(
+        s3_region=CONFIG.S3_REGION,
+        s3_url=CONFIG.S3_URL,
+        s3_key_id=CONFIG.S3_KEY_ID,
+        s3_key_secret=CONFIG.S3_KEY_SECRET,
+        s3_bucket=CONFIG.S3_BUCKET,
+    )
 else:
-    app.config["services"]: ExternalConnector = ExternalConnectorStub()
+    DB = Database()
+
 
 STATIC_DIRECTORY = Path(os.path.dirname(__file__)) / "static"
 ##################################
@@ -48,7 +77,7 @@ def test_view():
 
 @app.route("/")
 def teacher_view():
-    response = app.config["services"].getModeOfOperation()
+    response = CONNECTOR.getModeOfOperation()
     value = response["modeofoperation"]
     if value == True:
         return send_file(STATIC_DIRECTORY / "teacher-view.html")
@@ -120,7 +149,7 @@ def api_attendance(attendance_id):
 def get_classlist():
 
     try:
-        response = app.config["services"].getClasslist()
+        response = CONNECTOR.getClasslist()
 
         return response, 200
 
@@ -132,7 +161,7 @@ def get_classlist():
 def get_calendar():
 
     try:
-        response = app.config["services"].getCalendar()
+        response = CONNECTOR.getCalendar()
 
         return response, 200
 
@@ -143,3 +172,8 @@ def get_calendar():
 @app.route("/favicon.ico")
 def get_favicon():
     return send_file("static/images/favicon.ico")
+
+
+@app.route("/healthcheck")
+def get_health():
+    return "ok", 200

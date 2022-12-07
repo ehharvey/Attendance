@@ -110,7 +110,7 @@ def test_ExternalConnector_getCalendar():
         # Arrange
         external_connector = ExternalConnector()
         fetch_mock.side_effect = lambda *args: fetch_mock_fn(external_connector)
-        EXPECTED = json.dumps(ExternalConnectorStub().getCalendar())
+        EXPECTED = ExternalConnectorStub().getCalendar()
 
         # Act
         actual = external_connector.getCalendar()
@@ -133,7 +133,7 @@ def test_ExternalConnector_getClasslist():
         # Arrange
         external_connector = ExternalConnector()
         fetch_mock.side_effect = lambda *args: fetch_mock_fn(external_connector)
-        EXPECTED = json.dumps(ExternalConnectorStub().getClasslist())
+        EXPECTED = ExternalConnectorStub().getClasslist()
 
         # Act
         actual = external_connector.getClasslist()

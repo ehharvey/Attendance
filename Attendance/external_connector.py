@@ -21,6 +21,15 @@ class Service(BaseModel):
     ip: str
     port: int
 
+    @validator("ip")
+    def fix_ip(cls, value: str):
+        value = value.strip("/")
+
+        if value.startswith("https://") or value.startswith("http://"):
+            return value
+        else:
+            return f"http://{value}"
+
 
 class ServiceContainer(BaseModel):
     assignments: Service
@@ -36,20 +45,18 @@ class ServiceContainer(BaseModel):
 
 
 class ExternalConnector:
-    def __init__(self, timeout=3):
+    def __init__(self, url: Path = REPO_URL, file: Path = SERVICE_JSON_FILE, timeout=3):
         self.timeout = timeout
         self.fetched = False
         self.services = None
+        self.url = url
+        self.file = file
 
-    def get_service_json(
-        self,
-        URL=REPO_URL,
-        file=SERVICE_JSON_FILE,
-    ) -> Dict[str, dict]:
+    def get_service_json(self) -> Dict[str, dict]:
         with tempfile.TemporaryDirectory() as t:
-            git.Repo.clone_from(URL, t, branch="main", depth=1)
+            git.Repo.clone_from(self.url, t, branch="main", depth=1)
 
-            result_file = t / file
+            result_file = t / self.file
 
             with result_file.open(encoding="utf-8", mode="r") as f:
                 return json.load(f)
@@ -64,31 +71,33 @@ class ExternalConnector:
             self.fetch()
 
         response = requests.get(
-            f"http://{self.services.calendar.ip}:{self.services.calendar.port}/event",
+            f"{self.services.calendar.ip}:{self.services.calendar.port}/events",
             timeout=self.timeout,
         )
 
-        return response.content
+        return json.loads(response.content)
 
     def getClasslist(self):
         if not self.fetched:
             self.fetch()
 
         response = requests.get(
-            f"http://{self.services.classlist.ip}:{self.services.classlist.port}/students",
+            f"{self.services.classlist.ip}:{self.services.classlist.port}/students",
             timeout=self.timeout,
         )
 
-        return response.content
+        return json.loads(response.content)
 
     def getModeOfOperation(self):
         if not self.fetched:
             self.fetch()
 
         response = requests.get(
-            f"http://{self.services.adminactivities.ip}:{self.services.adminactivities.port}/modeofoperation",
+            f"{self.services.adminactivities.ip}:{self.services.adminactivities.port}/modeofoperation",
             timeout=self.timeout,
         )
+
+        return json.loads(response.content)
 
 
 class Student(BaseModel):
