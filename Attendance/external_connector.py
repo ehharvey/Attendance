@@ -43,11 +43,11 @@ class ExternalConnector:
 
     def get_service_json(
         self,
-        URL=REPO_URL,
+        url=REPO_URL,
         file=SERVICE_JSON_FILE,
     ) -> Dict[str, dict]:
         with tempfile.TemporaryDirectory() as t:
-            git.Repo.clone_from(URL, t, branch="main", depth=1)
+            git.Repo.clone_from(url, t, branch="main", depth=1)
 
             result_file = t / file
 

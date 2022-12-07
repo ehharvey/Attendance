@@ -20,6 +20,7 @@
             "env": {
                 "FLASK_APP": "app.py",
                 "FLASK_DEBUG": "1",
+                "SERVICE_REPO": "DEBUG",
             },
             "args": [
                 "--app",
