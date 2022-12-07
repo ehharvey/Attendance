@@ -365,7 +365,118 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
     page.appendChild(form);
 }
 
+/**----------------------------------------------------------------------------------------
+ * Student View version of functions below here
+ ------------------------------------------------------------------------------------------*/
+function fillAttendanceDropdown_student() {//doesnt show future attendances
+    const dropDown = document.getElementById("select-5c86");
+    dropDown.innerText = '';
+    const pastAttendance_string = localStorage.getItem('pastAttendances');
+    const pastAttendance_json = JSON.parse(pastAttendance_string);
+    localStorage.setItem('current_attendance', pastAttendance_string);
 
+    for (let i = 0; i < pastAttendance_json.ids.length; i++) {//completed attendances
+        const newOption = document.createElement("option");
+        let label = "Attendance " + pastAttendance_json.ids[i];
+        let l = (80 - label.length) % 6;
+        newOption.innerHTML = label.padEnd(122 - l, "&emsp;") + " (Completed)";
+
+        newOption.value = pastAttendance_json.ids[i];
+        dropDown.appendChild(newOption);
+    }
+}
+
+function fillPastAttendance_student() {
+    const page = document.getElementById("page-base");
+    const form = document.getElementById("form-students");
+    form.innerHTML = "";
+
+    const dropDown = document.getElementById("select-5c86");
+    const selected = dropDown.value;
+
+    const students = JSON.parse(localStorage.getItem('classlist'));
+    const pastAttendances = localStorage.getItem('current_attendance');
+    const attendance = JSON.parse(getAttendance(selected));
+    const classlist = JSON.parse(localStorage.getItem("classlist"));
+    for (let i = 0; i < attendance.records.length; i++) {
+        const name_label = document.createElement("p");
+        name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
+
+        for (let j = 0; j < classlist.length; j++) {    //match studentID against studentNumbers from classlist to find name
+            if (String(classlist[j].studentNumber) === attendance.records[i].studentID) {
+                var studentName = classlist[j].firstname + " " + classlist[j].lastname;
+
+                classlist.splice(j, 1);//remove classlist student so it doesnt get matched again
+
+                break;
+            }
+
+        }
+        if (typeof studentName === 'undefined') { //reuse student number if no name could be found/matched
+            studentName = attendance.records[i].studentID;
+        }
+
+        name_label.innerText = studentName;
+
+        const form_group = document.createElement("div");
+        form_group.classList.add("u-form-group", "u-form-input-layout-horizontal", "u-form-partition-factor-3", "u-form-radiobutton", "u-form-group-5");
+
+        const hidden_label = document.createElement("label");
+        hidden_label.classList.add("u-form-control-hidden", "u-label");
+
+        const buttonWrapper = document.createElement("div");
+        buttonWrapper.classList.add("u-form-radio-button-wrapper");
+
+        const rowPresent = document.createElement("div");
+        rowPresent.classList.add("u-input-row");
+
+        const presentRadio = document.createElement("input");
+        presentRadio.type = "radio";
+        presentRadio.value = "Present";
+        presentRadio.required = "required"; {
+            if (attendance.records[i].isPresent)
+                presentRadio.checked = "checked";
+        }
+        presentRadio.id = attendance.records[i].studentID;
+        presentRadio.name = "radio" + i;
+        const presentLabel = document.createElement("label");
+        presentLabel.htmlFor = "radio" + i;
+        presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+        presentLabel.innerText = "Present";
+
+        const rowAbsent = document.createElement("div");
+        rowAbsent.classList.add("u-input-row");
+
+        const absentRadio = document.createElement("input");
+        absentRadio.type = "radio";
+        absentRadio.value = "Absent";
+        absentRadio.required = "required";
+        if (!attendance.records[i].isPresent) {
+            absentRadio.checked = "checked";
+        }
+        absentRadio.name = "radio" + i;
+        const absentLabel = document.createElement("label");
+        absentLabel.htmlFor = "radio" + i;
+        absentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+        absentLabel.innerText = "Absent";
+
+        rowPresent.appendChild(presentRadio);
+        rowPresent.appendChild(presentLabel);
+
+        rowAbsent.appendChild(absentRadio);
+        rowAbsent.appendChild(absentLabel);
+
+        buttonWrapper.appendChild(rowPresent);
+        buttonWrapper.appendChild(rowAbsent);
+
+        form_group.appendChild(hidden_label);
+        form_group.appendChild(buttonWrapper);
+
+        form.appendChild(name_label);
+        form.appendChild(form_group);
+
+    }
+}
 /*------------------------------------------------------------------------------------------
 * Function	        :	logConsole()
 * Description	    :	This Function is used to log request and responses to the console.			
