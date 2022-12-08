@@ -108,11 +108,11 @@ class Student(BaseModel):
 
 
 class Event(BaseModel):
-    enterpriseID: str
+    eID: str
     title: str
     startDate: str
     dueDate: str
-    type: str
+    tag: str
 
 
 class ModeOfOperation(BaseModel):
@@ -163,39 +163,39 @@ class ExternalConnectorStub(ExternalConnector):
     def getCalendar(self):
         return [
             Event(
-                enterpriseID="id0",
+                eID="id0",
                 title="Course A Class",
                 startDate="2022-11-20T12:00:00",
                 dueDate="2022-11-25T12:00:00",
-                type="Test",
+                tag="Test",
             ).dict(),
             Event(
-                enterpriseID="id1",
+                eID="id1",
                 title="Test 3",
                 startDate="2022-12-7T12:00:00",
                 dueDate="2022-12-7T12:00:00",
-                type="Survey",
+                tag="Survey",
             ).dict(),
             Event(
-                enterpriseID="id2",
+                eID="id2",
                 title="Survey Due",
                 startDate="2022-12-14T12:00:00",
                 dueDate="2022-12-14T12:00:00",
-                type="Test",
+                tag="Test",
             ).dict(),
             Event(
-                enterpriseID="id3",
+                eID="id3",
                 title="Quiz",
                 startDate="2022-12-21T12:00:00",
                 dueDate="2022-12-21T12:00:00",
-                type="Assignment",
+                tag="Assignment",
             ).dict(),
             Event(
-                enterpriseID="id4",
+                eID="id4",
                 title="Misc",
                 startDate="2022-12-28T12:00:00",
                 dueDate="2022-12-28T12:00:00",
-                type="Test",
+                tag="Test",
             ).dict(),
         ]
 
