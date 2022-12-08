@@ -161,51 +161,38 @@ class ExternalConnectorStub(ExternalConnector):
         ]
 
     def getCalendar(self):
-        today_value = date.today()
-        now = datetime.now()
-        date_string = today_value.strftime("%B %d")
-        time = now.strftime("%H:%M:%S")
-        print(date_string)
         return [
             Event(
-                enterpriseID=today_value.strftime("%B %d") + " " + time,
-                title="Test Event",
+                enterpriseID="id0",
+                title="Course A Class",
                 startDate="2022-11-20T12:00:00",
                 dueDate="2022-11-25T12:00:00",
                 type="Test",
             ).dict(),
             Event(
-                enterpriseID=today_value.replace(month=12, day=7).strftime("%B %d")
-                + " "
-                + time,
-                title="Test Event",
+                enterpriseID="id1",
+                title="Test 3",
                 startDate="2022-12-7T12:00:00",
                 dueDate="2022-12-7T12:00:00",
-                type="Test",
+                type="Survey",
             ).dict(),
             Event(
-                enterpriseID=today_value.replace(month=12, day=14).strftime("%B %d")
-                + " "
-                + time,
-                title="Test Event",
+                enterpriseID="id2",
+                title="Survey Due",
                 startDate="2022-12-14T12:00:00",
                 dueDate="2022-12-14T12:00:00",
                 type="Test",
             ).dict(),
             Event(
-                enterpriseID=today_value.replace(month=12, day=21).strftime("%B %d")
-                + " "
-                + time,
-                title="Test Event",
+                enterpriseID="id3",
+                title="Quiz",
                 startDate="2022-12-21T12:00:00",
                 dueDate="2022-12-21T12:00:00",
-                type="Test",
+                type="Assignment",
             ).dict(),
             Event(
-                enterpriseID=today_value.replace(month=12, day=28).strftime("%B %d")
-                + " "
-                + time,
-                title="Test Event",
+                enterpriseID="id4",
+                title="Misc",
                 startDate="2022-12-28T12:00:00",
                 dueDate="2022-12-28T12:00:00",
                 type="Test",

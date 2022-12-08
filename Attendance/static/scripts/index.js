@@ -11,7 +11,6 @@ function getRoute(route, route_prepend = window.location.pathname) {
 }
 
 function getClasslist() {
-    logConsole("Getting Class List");
     const Url = getRoute('api/classlist');
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
@@ -56,8 +55,6 @@ function addAttendance(attendance_json) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", Url, false); // false for synchronous request
 
-    console.log(attendance_json); //log json object for debugging
-
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
 }
@@ -72,15 +69,18 @@ function updateAttendance(attendance_json) {
 
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(JSON.stringify(attendance_json));
+    console.log("response:");
+    console.log(xmlHttp.responseText);
 }
 
 function fillAttendanceDropdown() {
     const dropDown = document.getElementById("select-5c86");
+    dropDown.innerText = '';
     const pastAttendance_string = localStorage.getItem('pastAttendances');
     const pastAttendance_json = JSON.parse(pastAttendance_string);
-    localStorage.setItem('attendances', pastAttendance_string);
+    localStorage.setItem('current_attendance', pastAttendance_string);
 
-    for (let i = 0; i < pastAttendance_json.ids.length; i++) {
+    for (let i = 0; i < pastAttendance_json.ids.length; i++) {//completed attendances
         const newOption = document.createElement("option");
         let label = "Attendance " + pastAttendance_json.ids[i];
         let l = (80 - label.length) % 6;
@@ -89,8 +89,8 @@ function fillAttendanceDropdown() {
         newOption.value = pastAttendance_json.ids[i];
         dropDown.appendChild(newOption);
     }
-    const futureAttendance_json = JSON.parse(getCalendarEvent());
-    for (let i = 0; i < futureAttendance_json.length; i++) {
+    const futureAttendance_json = JSON.parse(localStorage.getItem("calendar"));
+    for (let i = 0; i < futureAttendance_json.length; i++) { //future attendances
         const newOption = document.createElement("option");
         newOption.innerText = "Attendance " + futureAttendance_json[i].enterpriseID;
         newOption.value = futureAttendance_json[i].enterpriseID;
@@ -98,19 +98,50 @@ function fillAttendanceDropdown() {
     }
 }
 
-function editOldAttendance() {
-    console.log("editing old attendances");
-}
-
-function submitNewAttendance() {
+function editOldAttendance() { //triggered by re-submit button
     const dropDown = document.getElementById("select-5c86");
     const selected = dropDown.value;
 
-    const pastAttendances = localStorage.getItem('pastAttendances')
-    const completedAttendance = pastAttendances.includes(selected)
+    let attendanceString = '{"id": "' + selected + '", "records": [';
+    let formOptions = document.getElementsByClassName("u-form-radiobutton");
+    let numOptions = formOptions.length;
+    for (let i = 0; i < numOptions; i++) {
+        console.log(formOptions[i]);
+        if (i > 0) {
+            attendanceString += ', ';
+        }
+        attendanceString += '{"studentID": "';
+        let label = formOptions[i].lastChild.firstChild.firstChild.id;
+        attendanceString += label;
+        attendanceString += '", "isPresent": '
+        if (formOptions[i].lastChild.firstChild.firstChild.checked) {
+            attendanceString += 'true}';
+        }
+        else {
+            attendanceString += 'false}';
+        }
+    }
+    attendanceString += ']}'
 
-    const nextAttendance = JSON.parse(getCalendarEvent());
-    let attendanceString = '{"id": "' + nextAttendance.enterpriseID + '", "records": [';
+    console.log(attendanceString);
+    updateAttendance(JSON.parse(attendanceString));
+    getSummary();   //force update of past attendances in local storage
+
+}
+
+function submitNewAttendance() {//triggered by submit button
+    const dropDown = document.getElementById("select-5c86");
+    const selected = dropDown.value;
+    const futureEvents = JSON.parse(localStorage.getItem("calendar"));
+
+    for (let i = 0; i < futureEvents.length; i++) {
+        if (futureEvents[i].enterpriseID === selected) {
+            var selectedEvent = futureEvents[i];
+        }
+    }
+
+
+    let attendanceString = '{"id": "' + selectedEvent.enterpriseID + '", "records": [';
     let formOptions = document.getElementsByClassName("u-form-radiobutton");
     let numOptions = formOptions.length;
     for (let i = 0; i < numOptions; i++) {
@@ -118,8 +149,8 @@ function submitNewAttendance() {
             attendanceString += ', ';
         }
         attendanceString += '{"studentID": ';
-        let label = formOptions[i].lastChild.firstChild.firstChild.id;
-        attendanceString += label;
+        let label = formOptions[i].lastChild.firstChild.firstChild.id; //gets id of radio buttons
+        attendanceString += label;                                      //which is set to studentNumber of student it reps.
         attendanceString += ', "isPresent": '
         if (formOptions[i].lastChild.firstChild.firstChild.checked) {
             attendanceString += 'true}';
@@ -130,7 +161,6 @@ function submitNewAttendance() {
     }
 
     attendanceString += ']}'
-    console.log(attendanceString);
     addAttendance(JSON.parse(attendanceString));
 }
 
@@ -143,18 +173,32 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
     const selected = dropDown.value;
 
     const students = JSON.parse(localStorage.getItem('classlist'));
-
-    const pastAttendances = localStorage.getItem('attendances');
+    const pastAttendances = localStorage.getItem('current_attendance');
 
     const completedAttendance = pastAttendances.includes(selected)
 
     if (completedAttendance) {
         const attendance = JSON.parse(getAttendance(selected));
-
+        const classlist = JSON.parse(localStorage.getItem("classlist"));
         for (let i = 0; i < attendance.records.length; i++) {
             const name_label = document.createElement("p");
             name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
-            name_label.innerText = attendance.records[i].studentID;
+
+            for (let j = 0; j < classlist.length; j++) {    //match studentID against studentNumbers from classlist to find name
+                if (String(classlist[j].studentNumber) === attendance.records[i].studentID) {
+                    var studentName = classlist[j].firstname + " " + classlist[j].lastname;
+
+                    classlist.splice(j, 1);//remove classlist student so it doesnt get matched again
+
+                    break;
+                }
+
+            }
+            if (typeof studentName === 'undefined') { //reuse student number if no name could be found/matched
+                studentName = attendance.records[i].studentID;
+            }
+
+            name_label.innerText = studentName;
 
             const number_label = document.createElement("p");
             number_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-2");
@@ -179,7 +223,7 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
                 if (attendance.records[i].isPresent)
                     presentRadio.checked = "checked";
             }
-            presentRadio.id = students[i].studentNumber;
+            presentRadio.id = attendance.records[i].studentID;
             presentRadio.name = "radio" + i;
             const presentLabel = document.createElement("label");
             presentLabel.htmlFor = "radio" + i;
@@ -223,7 +267,7 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
             var buttonFunction = function () { editOldAttendance(); };
         }
     }
-    else {
+    else { //non-completed attendance
         for (let i = 0; i < students.length; i++) {
             const name_label = document.createElement("p");
             name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
@@ -249,7 +293,7 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
             presentRadio.type = "radio";
             presentRadio.value = "Present";
             presentRadio.required = "required";
-            presentRadio.checked = "checked";
+            //presentRadio.checked = "checked";
             presentRadio.id = students[i].studentNumber;
             presentRadio.name = "radio" + i;
             const presentLabel = document.createElement("label");
@@ -292,8 +336,6 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
         }
     }
 
-
-
     const buttonRow = document.createElement("div");
     buttonRow.classList.add("u-form-group", "u-form-submit", "u-label-left");
 
@@ -310,8 +352,8 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
 
     const button = document.createElement("a");
     button.classList.add("u-btn", "u-btn-round", "u-btn-submit", "u-btn-style", "u-radius-50", "u-btn-2");
-    button.onclick = buttonFunction;
-    button.innerText = buttonText;
+    button.onclick = buttonFunction;//button function and text dependant on 
+    button.innerText = buttonText;//completed attendance or new attendance
 
     buttonContainer.appendChild(button);
     buttonContainer.appendChild(buttonInput);
@@ -323,7 +365,118 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
     page.appendChild(form);
 }
 
+/**----------------------------------------------------------------------------------------
+ * Student View version of functions below here
+ ------------------------------------------------------------------------------------------*/
+function fillAttendanceDropdown_student() {//doesnt show future attendances
+    const dropDown = document.getElementById("select-5c86");
+    dropDown.innerText = '';
+    const pastAttendance_string = localStorage.getItem('pastAttendances');
+    const pastAttendance_json = JSON.parse(pastAttendance_string);
+    localStorage.setItem('current_attendance', pastAttendance_string);
 
+    for (let i = 0; i < pastAttendance_json.ids.length; i++) {//completed attendances
+        const newOption = document.createElement("option");
+        let label = "Attendance " + pastAttendance_json.ids[i];
+        let l = (80 - label.length) % 6;
+        newOption.innerHTML = label.padEnd(122 - l, "&emsp;") + " (Completed)";
+
+        newOption.value = pastAttendance_json.ids[i];
+        dropDown.appendChild(newOption);
+    }
+}
+
+function fillPastAttendance_student() {
+    const page = document.getElementById("page-base");
+    const form = document.getElementById("form-students");
+    form.innerHTML = "";
+
+    const dropDown = document.getElementById("select-5c86");
+    const selected = dropDown.value;
+
+    const students = JSON.parse(localStorage.getItem('classlist'));
+    const pastAttendances = localStorage.getItem('current_attendance');
+    const attendance = JSON.parse(getAttendance(selected));
+    const classlist = JSON.parse(localStorage.getItem("classlist"));
+    for (let i = 0; i < attendance.records.length; i++) {
+        const name_label = document.createElement("p");
+        name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
+
+        for (let j = 0; j < classlist.length; j++) {    //match studentID against studentNumbers from classlist to find name
+            if (String(classlist[j].studentNumber) === attendance.records[i].studentID) {
+                var studentName = classlist[j].firstname + " " + classlist[j].lastname;
+
+                classlist.splice(j, 1);//remove classlist student so it doesnt get matched again
+
+                break;
+            }
+
+        }
+        if (typeof studentName === 'undefined') { //reuse student number if no name could be found/matched
+            studentName = attendance.records[i].studentID;
+        }
+
+        name_label.innerText = studentName;
+
+        const form_group = document.createElement("div");
+        form_group.classList.add("u-form-group", "u-form-input-layout-horizontal", "u-form-partition-factor-3", "u-form-radiobutton", "u-form-group-5");
+
+        const hidden_label = document.createElement("label");
+        hidden_label.classList.add("u-form-control-hidden", "u-label");
+
+        const buttonWrapper = document.createElement("div");
+        buttonWrapper.classList.add("u-form-radio-button-wrapper");
+
+        const rowPresent = document.createElement("div");
+        rowPresent.classList.add("u-input-row");
+
+        const presentRadio = document.createElement("input");
+        presentRadio.type = "radio";
+        presentRadio.value = "Present";
+        presentRadio.required = "required"; {
+            if (attendance.records[i].isPresent)
+                presentRadio.checked = "checked";
+        }
+        presentRadio.id = attendance.records[i].studentID;
+        presentRadio.name = "radio" + i;
+        const presentLabel = document.createElement("label");
+        presentLabel.htmlFor = "radio" + i;
+        presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+        presentLabel.innerText = "Present";
+
+        const rowAbsent = document.createElement("div");
+        rowAbsent.classList.add("u-input-row");
+
+        const absentRadio = document.createElement("input");
+        absentRadio.type = "radio";
+        absentRadio.value = "Absent";
+        absentRadio.required = "required";
+        if (!attendance.records[i].isPresent) {
+            absentRadio.checked = "checked";
+        }
+        absentRadio.name = "radio" + i;
+        const absentLabel = document.createElement("label");
+        absentLabel.htmlFor = "radio" + i;
+        absentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+        absentLabel.innerText = "Absent";
+
+        rowPresent.appendChild(presentRadio);
+        rowPresent.appendChild(presentLabel);
+
+        rowAbsent.appendChild(absentRadio);
+        rowAbsent.appendChild(absentLabel);
+
+        buttonWrapper.appendChild(rowPresent);
+        buttonWrapper.appendChild(rowAbsent);
+
+        form_group.appendChild(hidden_label);
+        form_group.appendChild(buttonWrapper);
+
+        form.appendChild(name_label);
+        form.appendChild(form_group);
+
+    }
+}
 /*------------------------------------------------------------------------------------------
 * Function	        :	logConsole()
 * Description	    :	This Function is used to log request and responses to the console.			
