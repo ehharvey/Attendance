@@ -108,11 +108,11 @@ class Student(BaseModel):
 
 
 class Event(BaseModel):
-    enterpriseID: str
+    eID: str
     title: str
     startDate: str
     dueDate: str
-    type: str
+    tag: str
 
 
 class ModeOfOperation(BaseModel):
