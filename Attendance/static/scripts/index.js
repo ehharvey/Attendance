@@ -11,7 +11,7 @@ function getRoute(route, route_prepend = window.location.pathname) {
 }
 
 function getClasslist() {
-    logConsole("Getting Class List");
+    console.log("Getting Class List");
     const Url = getRoute('api/classlist');
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
@@ -49,7 +49,7 @@ function getAttendance(attendanceID) {
 }
 
 function addAttendance(attendance_json) {
-    logConsole("Sending Backend Attendance");
+    console.log("Sending Backend Attendance");
 
     //const Url = 'http://192.168.2.103:5000/api/attendance/' + attendance_json.id;
     const Url = getRoute('/api/attendance/' + attendance_json.id); //localhost ip, change for class
@@ -63,7 +63,7 @@ function addAttendance(attendance_json) {
 }
 
 function updateAttendance(attendance_json) {
-    logConsole("Sending Backend Attendance");
+    console.log("Sending Backend Attendance");
     const Url = getRoute('/api/attendance/' + attendance_json.id); //localhost ip, change for class
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("PUT", Url, false); // false for synchronous request
