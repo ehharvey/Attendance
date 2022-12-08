@@ -92,8 +92,8 @@ function fillAttendanceDropdown() {
     const futureAttendance_json = JSON.parse(localStorage.getItem("calendar"));
     for (let i = 0; i < futureAttendance_json.length; i++) { //future attendances
         const newOption = document.createElement("option");
-        newOption.innerText = "Attendance " + futureAttendance_json[i].enterpriseID;
-        newOption.value = futureAttendance_json[i].enterpriseID;
+        newOption.innerText = "Attendance " + futureAttendance_json[i].eID;
+        newOption.value = futureAttendance_json[i].eID;
         dropDown.appendChild(newOption);
     }
 }
@@ -135,13 +135,13 @@ function submitNewAttendance() {//triggered by submit button
     const futureEvents = JSON.parse(localStorage.getItem("calendar"));
 
     for (let i = 0; i < futureEvents.length; i++) {
-        if (futureEvents[i].enterpriseID === selected) {
+        if (futureEvents[i].eID === selected) {
             var selectedEvent = futureEvents[i];
         }
     }
 
 
-    let attendanceString = '{"id": "' + selectedEvent.enterpriseID + '", "records": [';
+    let attendanceString = '{"id": "' + selectedEvent.eID + '", "records": [';
     let formOptions = document.getElementsByClassName("u-form-radiobutton");
     let numOptions = formOptions.length;
     for (let i = 0; i < numOptions; i++) {
