@@ -82,7 +82,7 @@ function fillAttendanceDropdown() {
 
     for (let i = 0; i < pastAttendance_json.ids.length; i++) {//completed attendances
         const newOption = document.createElement("option");
-        let label = "Attendance " + pastAttendance_json.ids[i] + " | " + pastAttendance_json.ids[];
+        let label = "Attendance " + pastAttendance_json.ids[i];
         let l = (80 - label.length) % 6;
         newOption.innerHTML = label.padEnd(122 - l, "&emsp;") + " (Completed)";
 
