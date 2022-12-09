@@ -80,6 +80,8 @@ function fillAttendanceDropdown() {
     const pastAttendance_json = JSON.parse(pastAttendance_string);
     localStorage.setItem('current_attendance', pastAttendance_string);
 
+    let completed = Array();
+
     for (let i = 0; i < pastAttendance_json.ids.length; i++) {//completed attendances
         const newOption = document.createElement("option");
         let label = "Attendance " + pastAttendance_json.ids[i];
@@ -87,6 +89,8 @@ function fillAttendanceDropdown() {
         newOption.innerHTML = label.padEnd(122 - l, "&emsp;") + " (Completed)";
 
         newOption.value = pastAttendance_json.ids[i];
+
+        completed.push(pastAttendance_json.ids[i]);
         dropDown.appendChild(newOption);
     }
     const futureAttendance_json = JSON.parse(localStorage.getItem("calendar"));
@@ -94,7 +98,10 @@ function fillAttendanceDropdown() {
         const newOption = document.createElement("option");
         newOption.innerText = "Attendance " + futureAttendance_json[i].eID;
         newOption.value = futureAttendance_json[i].eID;
-        dropDown.appendChild(newOption);
+
+        if (!(completed.includes(futureAttendance_json[i].eID))) {
+            dropDown.appendChild(newOption);
+        }
     }
 }
 
