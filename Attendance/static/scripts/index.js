@@ -449,6 +449,8 @@ function fillPastAttendance(teacherMode = true) { //triggered by the retrieve at
             form.appendChild(buttonRow);
             page.appendChild(form);
         }
+    } else {
+        buttonInput.value = "";
     }
 }
 
