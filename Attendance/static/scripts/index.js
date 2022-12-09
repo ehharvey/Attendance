@@ -243,208 +243,210 @@ function fillPastAttendance(teacherMode = true) { //triggered by the retrieve at
     const dropDown = document.getElementById("select-5c86");
     const selected = dropDown.value;
 
-    const students = JSON.parse(localStorage.getItem('classlist'));
-    const pastAttendances = localStorage.getItem('pastAttendances');
-    const pastAttendance_json = JSON.parse(pastAttendances)
+    if (selected) {
+        const students = JSON.parse(localStorage.getItem('classlist'));
+        const pastAttendances = localStorage.getItem('pastAttendances');
+        const pastAttendance_json = JSON.parse(pastAttendances)
 
-    const completedAttendance = pastAttendance_json.ids.includes(selected);
+        const completedAttendance = pastAttendance_json.ids.includes(selected);
 
-    if (completedAttendance) {
-        const attendance = JSON.parse(getAttendance(selected));
-        const classlist = JSON.parse(localStorage.getItem("classlist"));
-        for (let i = 0; i < attendance.records.length; i++) {
-            const name_label = document.createElement("p");
-            name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
+        if (completedAttendance) {
+            const attendance = JSON.parse(getAttendance(selected));
+            const classlist = JSON.parse(localStorage.getItem("classlist"));
+            for (let i = 0; i < attendance.records.length; i++) {
+                const name_label = document.createElement("p");
+                name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
 
-            for (let j = 0; j < classlist.length; j++) {    //match studentID against studentNumbers from classlist to find name
-                if (String(classlist[j].studentNumber) === attendance.records[i].studentID) {
-                    var studentName = classlist[j].firstname + " " + classlist[j].lastname;
+                for (let j = 0; j < classlist.length; j++) {    //match studentID against studentNumbers from classlist to find name
+                    if (String(classlist[j].studentNumber) === attendance.records[i].studentID) {
+                        var studentName = classlist[j].firstname + " " + classlist[j].lastname;
 
-                    classlist.splice(j, 1);//remove classlist student so it doesnt get matched again
+                        classlist.splice(j, 1);//remove classlist student so it doesnt get matched again
 
-                    break;
+                        break;
+                    }
+
+                }
+                if (typeof studentName === 'undefined') { //reuse student number if no name could be found/matched
+                    studentName = "UNKNOWN";
                 }
 
+                name_label.innerText = studentName;
+
+                const number_label = document.createElement("p");
+                number_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-2");
+
+                if (teacherMode) {
+                    number_label.innerText = attendance.records[i].studentID;
+                } else {
+                    number_label.innerText = "";
+                }
+
+
+                const form_group = document.createElement("div");
+                form_group.classList.add("u-form-group", "u-form-input-layout-horizontal", "u-form-partition-factor-3", "u-form-radiobutton", "u-form-group-5");
+
+                const hidden_label = document.createElement("label");
+                hidden_label.classList.add("u-form-control-hidden", "u-label");
+
+                const buttonWrapper = document.createElement("div");
+                buttonWrapper.classList.add("u-form-radio-button-wrapper");
+
+                const rowPresent = document.createElement("div");
+                rowPresent.classList.add("u-input-row");
+
+                const presentRadio = document.createElement("input");
+                presentRadio.type = "radio";
+                presentRadio.value = "Present";
+                presentRadio.required = "required"; {
+                    if (attendance.records[i].isPresent)
+                        presentRadio.checked = "checked";
+                }
+                presentRadio.id = attendance.records[i].studentID;
+                presentRadio.name = "radio" + i;
+                const presentLabel = document.createElement("label");
+                presentLabel.htmlFor = "radio" + i;
+                presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+                presentLabel.innerText = "Present";
+
+                const rowAbsent = document.createElement("div");
+                rowAbsent.classList.add("u-input-row");
+
+                const absentRadio = document.createElement("input");
+                absentRadio.type = "radio";
+                absentRadio.value = "Absent";
+                absentRadio.required = "required";
+                if (!attendance.records[i].isPresent) {
+                    absentRadio.checked = "checked";
+                }
+                absentRadio.name = "radio" + i;
+                const absentLabel = document.createElement("label");
+                absentLabel.htmlFor = "radio" + i;
+                absentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+                absentLabel.innerText = "Absent";
+
+                if (!teacherMode) {
+                    presentRadio.disabled = true;
+                    absentRadio.disabled = true;
+                }
+
+                rowPresent.appendChild(presentRadio);
+                rowPresent.appendChild(presentLabel);
+
+                rowAbsent.appendChild(absentRadio);
+                rowAbsent.appendChild(absentLabel);
+
+                buttonWrapper.appendChild(rowPresent);
+                buttonWrapper.appendChild(rowAbsent);
+
+                form_group.appendChild(hidden_label);
+                form_group.appendChild(buttonWrapper);
+
+                form.appendChild(name_label);
+                form.appendChild(number_label);
+                form.appendChild(form_group);
+
+                var buttonText = "Re-Submit";
+                var buttonFunction = function () { editOldAttendance(); };
             }
-            if (typeof studentName === 'undefined') { //reuse student number if no name could be found/matched
-                studentName = "UNKNOWN";
-            }
-
-            name_label.innerText = studentName;
-
-            const number_label = document.createElement("p");
-            number_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-2");
-
-            if (teacherMode) {
-                number_label.innerText = attendance.records[i].studentID;
-            } else {
-                number_label.innerText = "";
-            }
-
-
-            const form_group = document.createElement("div");
-            form_group.classList.add("u-form-group", "u-form-input-layout-horizontal", "u-form-partition-factor-3", "u-form-radiobutton", "u-form-group-5");
-
-            const hidden_label = document.createElement("label");
-            hidden_label.classList.add("u-form-control-hidden", "u-label");
-
-            const buttonWrapper = document.createElement("div");
-            buttonWrapper.classList.add("u-form-radio-button-wrapper");
-
-            const rowPresent = document.createElement("div");
-            rowPresent.classList.add("u-input-row");
-
-            const presentRadio = document.createElement("input");
-            presentRadio.type = "radio";
-            presentRadio.value = "Present";
-            presentRadio.required = "required"; {
-                if (attendance.records[i].isPresent)
-                    presentRadio.checked = "checked";
-            }
-            presentRadio.id = attendance.records[i].studentID;
-            presentRadio.name = "radio" + i;
-            const presentLabel = document.createElement("label");
-            presentLabel.htmlFor = "radio" + i;
-            presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
-            presentLabel.innerText = "Present";
-
-            const rowAbsent = document.createElement("div");
-            rowAbsent.classList.add("u-input-row");
-
-            const absentRadio = document.createElement("input");
-            absentRadio.type = "radio";
-            absentRadio.value = "Absent";
-            absentRadio.required = "required";
-            if (!attendance.records[i].isPresent) {
-                absentRadio.checked = "checked";
-            }
-            absentRadio.name = "radio" + i;
-            const absentLabel = document.createElement("label");
-            absentLabel.htmlFor = "radio" + i;
-            absentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
-            absentLabel.innerText = "Absent";
-
-            if (!teacherMode) {
-                presentRadio.disabled = true;
-                absentRadio.disabled = true;
-            }
-
-            rowPresent.appendChild(presentRadio);
-            rowPresent.appendChild(presentLabel);
-
-            rowAbsent.appendChild(absentRadio);
-            rowAbsent.appendChild(absentLabel);
-
-            buttonWrapper.appendChild(rowPresent);
-            buttonWrapper.appendChild(rowAbsent);
-
-            form_group.appendChild(hidden_label);
-            form_group.appendChild(buttonWrapper);
-
-            form.appendChild(name_label);
-            form.appendChild(number_label);
-            form.appendChild(form_group);
-
-            var buttonText = "Re-Submit";
-            var buttonFunction = function () { editOldAttendance(); };
         }
-    }
-    else { //non-completed attendance
-        for (let i = 0; i < students.length; i++) {
-            const name_label = document.createElement("p");
-            name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
-            name_label.innerText = students[i].firstname + " " + students[i].lastname;
+        else { //non-completed attendance
+            for (let i = 0; i < students.length; i++) {
+                const name_label = document.createElement("p");
+                name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
+                name_label.innerText = students[i].firstname + " " + students[i].lastname;
 
-            const number_label = document.createElement("p");
-            number_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-2");
-            number_label.innerText = students[i].studentNumber;
+                const number_label = document.createElement("p");
+                number_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-2");
+                number_label.innerText = students[i].studentNumber;
 
-            const form_group = document.createElement("div");
-            form_group.classList.add("u-form-group", "u-form-input-layout-horizontal", "u-form-partition-factor-3", "u-form-radiobutton", "u-form-group-5");
+                const form_group = document.createElement("div");
+                form_group.classList.add("u-form-group", "u-form-input-layout-horizontal", "u-form-partition-factor-3", "u-form-radiobutton", "u-form-group-5");
 
-            const hidden_label = document.createElement("label");
-            hidden_label.classList.add("u-form-control-hidden", "u-label");
+                const hidden_label = document.createElement("label");
+                hidden_label.classList.add("u-form-control-hidden", "u-label");
 
-            const buttonWrapper = document.createElement("div");
-            buttonWrapper.classList.add("u-form-radio-button-wrapper");
+                const buttonWrapper = document.createElement("div");
+                buttonWrapper.classList.add("u-form-radio-button-wrapper");
 
-            const rowPresent = document.createElement("div");
-            rowPresent.classList.add("u-input-row");
+                const rowPresent = document.createElement("div");
+                rowPresent.classList.add("u-input-row");
 
-            const presentRadio = document.createElement("input");
-            presentRadio.type = "radio";
-            presentRadio.value = "Present";
-            presentRadio.required = "required";
-            //presentRadio.checked = "checked";
-            presentRadio.id = students[i].studentNumber;
-            presentRadio.name = "radio" + i;
-            const presentLabel = document.createElement("label");
-            presentLabel.htmlFor = "radio" + i;
-            presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
-            presentLabel.innerText = "Present";
+                const presentRadio = document.createElement("input");
+                presentRadio.type = "radio";
+                presentRadio.value = "Present";
+                presentRadio.required = "required";
+                //presentRadio.checked = "checked";
+                presentRadio.id = students[i].studentNumber;
+                presentRadio.name = "radio" + i;
+                const presentLabel = document.createElement("label");
+                presentLabel.htmlFor = "radio" + i;
+                presentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+                presentLabel.innerText = "Present";
 
-            const rowAbsent = document.createElement("div");
-            rowAbsent.classList.add("u-input-row");
+                const rowAbsent = document.createElement("div");
+                rowAbsent.classList.add("u-input-row");
 
-            const absentRadio = document.createElement("input");
-            absentRadio.type = "radio";
-            absentRadio.value = "Absent";
-            absentRadio.required = "required";
-            absentRadio.name = "radio" + i;
-            const absentLabel = document.createElement("label");
-            absentLabel.htmlFor = "radio" + i;
-            absentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
-            absentLabel.innerText = "Absent";
+                const absentRadio = document.createElement("input");
+                absentRadio.type = "radio";
+                absentRadio.value = "Absent";
+                absentRadio.required = "required";
+                absentRadio.name = "radio" + i;
+                const absentLabel = document.createElement("label");
+                absentLabel.htmlFor = "radio" + i;
+                absentLabel.classList.add("u-label", "u-spacing-10", "u-label-4");
+                absentLabel.innerText = "Absent";
 
 
-            rowPresent.appendChild(presentRadio);
-            rowPresent.appendChild(presentLabel);
+                rowPresent.appendChild(presentRadio);
+                rowPresent.appendChild(presentLabel);
 
-            rowAbsent.appendChild(absentRadio);
-            rowAbsent.appendChild(absentLabel);
+                rowAbsent.appendChild(absentRadio);
+                rowAbsent.appendChild(absentLabel);
 
-            buttonWrapper.appendChild(rowPresent);
-            buttonWrapper.appendChild(rowAbsent);
+                buttonWrapper.appendChild(rowPresent);
+                buttonWrapper.appendChild(rowAbsent);
 
-            form_group.appendChild(hidden_label);
-            form_group.appendChild(buttonWrapper);
+                form_group.appendChild(hidden_label);
+                form_group.appendChild(buttonWrapper);
 
-            form.appendChild(name_label);
-            form.appendChild(number_label);
-            form.appendChild(form_group);
+                form.appendChild(name_label);
+                form.appendChild(number_label);
+                form.appendChild(form_group);
 
-            var buttonText = "Submit";
-            var buttonFunction = function () { submitNewAttendance(); };
+                var buttonText = "Submit";
+                var buttonFunction = function () { submitNewAttendance(); };
+            }
         }
+
+        const buttonRow = document.createElement("div");
+        buttonRow.classList.add("u-form-group", "u-form-submit", "u-label-left");
+
+        const buttonSpacer = document.createElement("label");
+        buttonSpacer.classList.add("u-label", "u-spacing-10", "u-label-17");
+
+        const buttonContainer = document.createElement("div");
+        buttonContainer.classList.add("u-align-left", "u-btn-submit-container");
+
+        const buttonInput = document.createElement("input");
+        buttonInput.type = "submit";
+        buttonInput.value = "submit";
+        buttonInput.classList.add("u-form-control-hidden");
+
+        const button = document.createElement("a");
+        button.classList.add("u-btn", "u-btn-round", "u-btn-submit", "u-btn-style", "u-radius-50", "u-btn-2");
+        button.onclick = buttonFunction;//button function and text dependant on 
+        button.innerText = buttonText;//completed attendance or new attendance
+
+        buttonContainer.appendChild(button);
+        buttonContainer.appendChild(buttonInput);
+
+        buttonRow.appendChild(buttonSpacer);
+        buttonRow.appendChild(buttonContainer);
+
+        form.appendChild(buttonRow);
+        page.appendChild(form);
     }
-
-    const buttonRow = document.createElement("div");
-    buttonRow.classList.add("u-form-group", "u-form-submit", "u-label-left");
-
-    const buttonSpacer = document.createElement("label");
-    buttonSpacer.classList.add("u-label", "u-spacing-10", "u-label-17");
-
-    const buttonContainer = document.createElement("div");
-    buttonContainer.classList.add("u-align-left", "u-btn-submit-container");
-
-    const buttonInput = document.createElement("input");
-    buttonInput.type = "submit";
-    buttonInput.value = "submit";
-    buttonInput.classList.add("u-form-control-hidden");
-
-    const button = document.createElement("a");
-    button.classList.add("u-btn", "u-btn-round", "u-btn-submit", "u-btn-style", "u-radius-50", "u-btn-2");
-    button.onclick = buttonFunction;//button function and text dependant on 
-    button.innerText = buttonText;//completed attendance or new attendance
-
-    buttonContainer.appendChild(button);
-    buttonContainer.appendChild(buttonInput);
-
-    buttonRow.appendChild(buttonSpacer);
-    buttonRow.appendChild(buttonContainer);
-
-    form.appendChild(buttonRow);
-    page.appendChild(form);
 }
 
 /*------------------------------------------------------------------------------------------
