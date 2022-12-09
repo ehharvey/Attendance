@@ -271,7 +271,7 @@ function fillPastAttendance() { //triggered by the retrieve attendance button
         for (let i = 0; i < students.length; i++) {
             const name_label = document.createElement("p");
             name_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-1");
-            name_label.innerText = students[i].firstname + students[i].lastname;
+            name_label.innerText = students[i].firstname + " " + students[i].lastname;
 
             const number_label = document.createElement("p");
             number_label.classList.add("u-form-group", "u-form-partition-factor-3", "u-form-text", "u-text", "u-text-2");
