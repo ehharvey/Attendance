@@ -29,7 +29,7 @@
 </head>
 
 <body class="u-body u-overlap u-xl-mode" data-lang="en"
-  onload="getSummary(), getCalendarEvent(), getClasslist(),fillAttendanceDropdown_student()">
+  onload="getSummary(), getCalendarEvent(), getClasslist(),fillAttendanceDropdown(false), fillPastAttendance(false)">
   <header class="u-clearfix u-header" id="sec-69df" data-animation-name="" data-animation-duration="0"
     data-animation-delay="0" data-animation-direction="">
     <div class="u-clearfix u-sheet u-sheet-1">
@@ -57,8 +57,8 @@
           </li>
           <li class="u-tab-item" role="presentation">
             <a class="u-active-palette-1-base u-button-style u-grey-10 u-tab-link u-text-active-white u-text-black u-tab-link-2"
-              id="link-tab-be89" href="192.0.0.0/some_url" role="tab" aria-controls="tab-be89"
-              aria-selected="false">Return Home</a>
+              id="link-tab-be89" onclick="goHome()" role="tab" aria-controls="tab-be89" aria-selected="false">Return
+              Home</a>
           </li>
         </ul>
         <div class="u-tab-content">
@@ -70,10 +70,11 @@
                   class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form-1"
                   style="padding: 10px;">
                   <div class="u-form-group u-form-select u-label-top u-form-group-1">
-                    <label for="select-5c86" class="u-label">Previous Attendace Dates</label>
+                    <label for="select-5c86" class="u-label">Previous Attendance Dates</label>
                     <div class="u-form-select-wrapper">
                       <select id="select-5c86" name="select"
-                        class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                        class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white"
+                        onchange="fillPastAttendance(false)">
                       </select>
                       <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px"
@@ -82,11 +83,11 @@
                       </svg>
                     </div>
                   </div>
-                  <div class="u-align-right u-form-group u-form-submit u-label-top">
+                  <!-- <div class="u-align-right u-form-group u-form-submit u-label-top">
                     <input type="submit" onclick="fillPastAttendance_student()" value="submit"
                       class="u-form-control-hidden">
                     <a href="#" class="u-btn u-btn-submit u-button-style">Retrieve Attendance</a>
-                  </div>
+                  </div> -->
 
 
                 </form>
@@ -101,12 +102,14 @@
                   <thead class="u-palette-4-base u-table-header u-table-header-1">
                     <tr style="height: 21px;">
                       <th class="u-border-1 u-border-palette-4-base u-table-cell">Student Name</th>
+                      <th class="u-border-1 u-border-palette-4-base u-table-cell"></th>
                       <th class="u-border-1 u-border-palette-4-base u-table-cell">Present or Absent</th>
                     </tr>
                   </thead>
                   <tbody class="u-table-body" id="pastAttendanceTableBody">
                     <tr style="height: 44px;">
                       <td class="u-first-column u-table-cell"></td>
+                      <td class="u-table-cell"></td>
                       <td class="u-table-cell"></td>
                     </tr>
                   </tbody>

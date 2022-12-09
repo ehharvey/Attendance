@@ -174,6 +174,19 @@ def get_favicon():
     return send_file("static/images/favicon.ico")
 
 
+@app.route("/api/home_url")
+def get_home_url():
+    return {
+        "url": f"{CONNECTOR.services.adminactivities.ip}:{CONNECTOR.services.adminactivities.port}"
+    }
+
+
 @app.route("/healthcheck")
 def get_health():
     return "ok", 200
+
+
+@app.after_request
+def add_header(response):
+    response.cache_control.max_age = 0
+    return response
