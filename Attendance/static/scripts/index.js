@@ -43,7 +43,6 @@ function getCalendarEvent() {
 }
 
 function getSummary() {
-    //const Url = 'http://192.168.2.103:5000/api/attendance';//swap IP for class
     const Url = getRoute('/api/attendance');
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", Url, false); // false for synchronous request
@@ -146,22 +145,11 @@ function fillAttendanceDropdown(teacherMode = true) {
 
     let completed = Array();
 
-    // for (let i = 0; i < pastAttendance_json.ids.length; i++) {//completed attendances
-    //     const newOption = document.createElement("option");
-    //     let label = pastAttendance_json.ids[i];
-    //     let l = (80 - label.length) % 6;
-    //     newOption.innerHTML = label.padEnd(122 - l, "&emsp;") + " (Completed)";
-
-    //     newOption.value = pastAttendance_json.ids[i];
-
-    //     completed.push(pastAttendance_json.ids[i]);
-    //     dropDown.appendChild(newOption);
-    // }
     const futureAttendance_json = JSON.parse(localStorage.getItem("calendar"));
     for (let i = 0; i < futureAttendance_json.length; i++) { //future attendances
         const newOption = document.createElement("option");
         newOption.innerText = "Attendance " + futureAttendance_json[i].eID;
-        let label = futureAttendance_json[i].eID + " " + futureAttendance_json[i].title;
+        let label = "(" + futureAttendance_json[i].eID + ") " + futureAttendance_json[i].title + " | " + futureAttendance_json[i].tag;
         let l = (80 - label.length) % 6;
 
         newOption.value = futureAttendance_json[i].eID;
@@ -192,7 +180,6 @@ function editOldAttendance() { //triggered by re-submit button
     let formOptions = document.getElementsByClassName("u-form-radiobutton");
     let numOptions = formOptions.length;
     for (let i = 0; i < numOptions; i++) {
-        console.log(formOptions[i]);
         if (i > 0) {
             attendanceString += ', ';
         }
