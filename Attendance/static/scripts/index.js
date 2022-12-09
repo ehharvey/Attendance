@@ -346,6 +346,7 @@ function fillPastAttendance(teacherMode = true) { //triggered by the retrieve at
                 form.appendChild(number_label);
                 form.appendChild(form_group);
 
+
                 var buttonText = "Re-Submit";
                 var buttonFunction = function () { editOldAttendance(); };
             }
@@ -419,33 +420,35 @@ function fillPastAttendance(teacherMode = true) { //triggered by the retrieve at
             }
         }
 
-        const buttonRow = document.createElement("div");
-        buttonRow.classList.add("u-form-group", "u-form-submit", "u-label-left");
+        if (teacherMode) {
+            const buttonRow = document.createElement("div");
+            buttonRow.classList.add("u-form-group", "u-form-submit", "u-label-left");
 
-        const buttonSpacer = document.createElement("label");
-        buttonSpacer.classList.add("u-label", "u-spacing-10", "u-label-17");
+            const buttonSpacer = document.createElement("label");
+            buttonSpacer.classList.add("u-label", "u-spacing-10", "u-label-17");
 
-        const buttonContainer = document.createElement("div");
-        buttonContainer.classList.add("u-align-left", "u-btn-submit-container");
+            const buttonContainer = document.createElement("div");
+            buttonContainer.classList.add("u-align-left", "u-btn-submit-container");
 
-        const buttonInput = document.createElement("input");
-        buttonInput.type = "submit";
-        buttonInput.value = "submit";
-        buttonInput.classList.add("u-form-control-hidden");
+            const buttonInput = document.createElement("input");
+            buttonInput.type = "submit";
+            buttonInput.value = "submit";
+            buttonInput.classList.add("u-form-control-hidden");
 
-        const button = document.createElement("a");
-        button.classList.add("u-btn", "u-btn-round", "u-btn-submit", "u-btn-style", "u-radius-50", "u-btn-2");
-        button.onclick = buttonFunction;//button function and text dependant on 
-        button.innerText = buttonText;//completed attendance or new attendance
+            const button = document.createElement("a");
+            button.classList.add("u-btn", "u-btn-round", "u-btn-submit", "u-btn-style", "u-radius-50", "u-btn-2");
+            button.onclick = buttonFunction;//button function and text dependant on 
+            button.innerText = buttonText;//completed attendance or new attendance
 
-        buttonContainer.appendChild(button);
-        buttonContainer.appendChild(buttonInput);
+            buttonContainer.appendChild(button);
+            buttonContainer.appendChild(buttonInput);
 
-        buttonRow.appendChild(buttonSpacer);
-        buttonRow.appendChild(buttonContainer);
+            buttonRow.appendChild(buttonSpacer);
+            buttonRow.appendChild(buttonContainer);
 
-        form.appendChild(buttonRow);
-        page.appendChild(form);
+            form.appendChild(buttonRow);
+            page.appendChild(form);
+        }
     }
 }
 
