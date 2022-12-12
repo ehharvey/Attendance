@@ -57,7 +57,7 @@ six==1.16.0
 smmap==5.0.0
 stevedore==4.1.1
 tomli==2.0.1
-twine==4.0.1
+twine==4.0.2
 typing_extensions==4.4.0
 urllib3==1.26.13
 webencodings==0.5.1
