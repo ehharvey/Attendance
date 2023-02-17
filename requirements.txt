@@ -55,7 +55,7 @@ SecretStorage==3.3.3
 setuptools-scm==7.0.5
 six==1.16.0
 smmap==5.0.0
-stevedore==4.1.1
+stevedore==5.0.0
 tomli==2.0.1
 twine==4.0.1
 typing_extensions==4.4.0
