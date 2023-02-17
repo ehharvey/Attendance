@@ -52,7 +52,7 @@ rfc3986==2.0.0
 rich==12.6.0
 s3transfer==0.6.0
 SecretStorage==3.3.3
-setuptools-scm==7.0.5
+setuptools-scm==7.1.0
 six==1.16.0
 smmap==5.0.0
 stevedore==4.1.1
