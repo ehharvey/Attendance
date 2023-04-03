@@ -8,7 +8,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "wrangler": "^2.4.4",
+    "wrangler": "^2.13.0",
     "xhr2": "^0.2.1"
   },
   "jest": {
